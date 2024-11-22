@@ -42,7 +42,7 @@
             "time": 9,
             "x": 370,
             "y": 427,
-            "note_expand_speed": 2.2
+            "note_expand_speed": 2.7
         },
         {
             "time": 9.4,
@@ -55,37 +55,37 @@
             "time": 10,
             "x": 400,
             "y": 325,
-            "note_expand_speed": 1.2
+            "note_expand_speed": 1.17
         },
         {
             "time": 11.4,
             "x": 400,
             "y": 325,
-            "note_expand_speed": 1.2
+            "note_expand_speed": 1.17
         },
         {
             "time": 12.8,
             "x": 400,
             "y": 325,
-            "note_expand_speed": 1.2
+            "note_expand_speed": 1.17
         },
         {
             "time": 14.2,
             "x": 400,
             "y": 325,
-            "note_expand_speed": 1.2
+            "note_expand_speed": 1.17
         },
         {
             "time": 15.6,
             "x": 400,
             "y": 325,
-            "note_expand_speed": 1.2
+            "note_expand_speed": 1.17
         },
         {
             "time": 17,
             "x": 400,
             "y": 325,
-            "note_expand_speed": 1.2
+            "note_expand_speed": 1.17
         }
     ]
 }

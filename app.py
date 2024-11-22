@@ -146,17 +146,18 @@ def draw_game():
     if feedback_timer > 0:
         feedback_scale = 1.0 + 0.5 * (FEEDBACK_DURATION - feedback_timer) / FEEDBACK_DURATION
         feedback_alpha = int(255 * (feedback_timer / FEEDBACK_DURATION))
-        feedback_text = small_font.render(feedback, True, WHITE)
+        feedback_text = small_font.render(f"{feedback}! x{combo}" if combo > 1 else f"{feedback}!", True, WHITE)
         feedback_text.set_alpha(feedback_alpha)
         feedback_text = pygame.transform.scale(feedback_text, (int(feedback_text.get_width() * feedback_scale), int(feedback_text.get_height() * feedback_scale)))
         screen.blit(feedback_text, (feedback_x - feedback_text.get_width() // 2, feedback_y - feedback_text.get_height() // 2))
         feedback_timer -= 1
 
 def check_note_hit(note):
-    if abs(note.y - line_y) <= 20:
-        return "perfect"
-    elif abs(note.y - line_y) <= 40:
-        return "great"
+    if abs(note.y - line_y) <= NOTE_RADIUS * 2:
+        if note.progress >= NOTE_RADIUS - 10:
+            return "perfect"
+        elif note.progress >= NOTE_RADIUS - 20:
+            return "great"
     return None
 
 def load_notes(filename):
@@ -174,10 +175,10 @@ bottom_line_y = settings['bottom_line_y']
 NOTE_SPEED = settings['note_speed']
 NOTE_EXPAND_SPEED = settings['note_expand_speed']
 
-# Initialize line position and direction
+# Starting line position and direction
 line_y = SCREEN_HEIGHT // 2
 line_speed = settings['line_speed']
-line_direction = 1  # 1 for moving down, -1 for moving up
+line_direction = 1
 
 def update_line_position():
     global line_y, line_direction
@@ -187,10 +188,9 @@ def update_line_position():
 
     # Check for boundary collisions
     if line_y >= settings['bottom_line_y'] or line_y <= settings['top_line_y']:
-        line_direction *= -1  # Reverse direction
+        line_direction *= -1
         line_y = max(min(line_y, settings['bottom_line_y']), settings['top_line_y'])
 
-# Load and play music
 pygame.mixer.music.load('./songs/freedom_dive.mp3')
 
 def main():
@@ -240,7 +240,7 @@ def main():
                                     score += 4044 * hit_notes // total_notes
                                 elif judgement == "great":
                                     combo = 0
-                                    hit_notes += 0.95
+                                    hit_notes += 0.9
                                     score += 3076 * hit_notes // total_notes
                                 else:
                                     combo = 0

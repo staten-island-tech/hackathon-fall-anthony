@@ -101,7 +101,7 @@ notes = []
 def draw_menu():
     screen.fill(BLACK)
     title_text = font.render("Pulsebound", True, WHITE)
-    play_text = small_font.render('Press ENTER to Play "Freedom Dive" by XI', True, WHITE)
+    play_text = small_font.render("Press ENTER to Play", True, WHITE)
     screen.blit(title_text, (SCREEN_WIDTH // 2 - title_text.get_width() // 2, SCREEN_HEIGHT // 2 - title_text.get_height() // 2 - 50))
     screen.blit(play_text, (SCREEN_WIDTH // 2 - play_text.get_width() // 2, SCREEN_HEIGHT // 2 - play_text.get_height() // 2 + 50))
 
@@ -136,7 +136,6 @@ def draw_game():
     effects[:] = [effect for effect in effects if effect.alpha > 0]
 
     score_text = small_font.render(f"Score: {int(score)}", True, WHITE)
-    combo_text = small_font.render(f"Combo: {combo}", True, WHITE)
     accuracy = (hit_notes / total_notes * 100) if total_notes > 0 else 0
     accuracy_text = small_font.render(f"Accuracy: {accuracy:.2f}%", True, WHITE)
     screen.blit(score_text, (10, 10))
@@ -252,6 +251,38 @@ def main():
                             feedback_y = line_y
                             combo = 0
                             total_notes += 1
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                hit = False
+                for note in notes:
+                    judgement = check_note_hit(note)
+                    if judgement:
+                        notes.remove(note)
+                        feedback = judgement.capitalize()
+                        feedback_timer = FEEDBACK_DURATION
+                        feedback_scale = 1.0
+                        feedback_x = note.x
+                        feedback_y = note.y
+                        total_notes += 1
+                        hit = True
+                        effects.append(Effect(note.y))
+                        if judgement == "perfect":
+                            combo += 1
+                            hit_notes += 1
+                            score += 4044 * hit_notes // total_notes
+                        elif judgement == "great":
+                            combo = 0
+                            hit_notes += 0.9
+                            score += 3076 * hit_notes // total_notes
+                        else:
+                            combo = 0
+                if not hit:
+                    feedback = "Miss"
+                    feedback_timer = FEEDBACK_DURATION
+                    feedback_scale = 1.0
+                    feedback_x = SCREEN_WIDTH // 2
+                    feedback_y = line_y
+                    combo = 0
+                    total_notes += 1
 
         if state == MENU:
             draw_menu()

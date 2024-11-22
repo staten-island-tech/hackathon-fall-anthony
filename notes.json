@@ -1,0 +1,91 @@
+{
+    "settings": {
+        "line_speed": 5,
+        "top_line_y": 125,
+        "bottom_line_y": 525,
+        "note_speed": 5,
+        "note_expand_speed": 1.5
+    },
+    "notes": [
+        {
+            "time": 1,
+            "x": 104,
+            "y": 426,
+            "note_expand_speed": 1.5
+        },
+        {
+            "time": 3.4,
+            "x": 457,
+            "y": 213,
+            "note_expand_speed": 1.5
+        },
+        {
+            "time": 5.5,
+            "x": 240,
+            "y": 387,
+            "note_expand_speed": 1.7
+        },
+        {
+            "time": 7.5,
+            "x": 510,
+            "y": 410,
+            "note_expand_speed": 1.6,
+            "line_speed": 6
+        },
+        {
+            "time": 8.3,
+            "x": 245,
+            "y": 223,
+            "note_expand_speed": 2
+        },
+        {
+            "time": 9,
+            "x": 370,
+            "y": 427,
+            "note_expand_speed": 2.2
+        },
+        {
+            "time": 9.4,
+            "x": 567,
+            "y": 223,
+            "note_expand_speed": 2,
+            "line_speed": 7
+        },
+        {
+            "time": 10,
+            "x": 400,
+            "y": 325,
+            "note_expand_speed": 1.2
+        },
+        {
+            "time": 11.4,
+            "x": 400,
+            "y": 325,
+            "note_expand_speed": 1.2
+        },
+        {
+            "time": 12.8,
+            "x": 400,
+            "y": 325,
+            "note_expand_speed": 1.2
+        },
+        {
+            "time": 14.2,
+            "x": 400,
+            "y": 325,
+            "note_expand_speed": 1.2
+        },
+        {
+            "time": 15.6,
+            "x": 400,
+            "y": 325,
+            "note_expand_speed": 1.2
+        },
+        {
+            "time": 17,
+            "x": 400,
+            "y": 325,
+            "note_expand_speed": 1.2
+        }
+    ]
+}

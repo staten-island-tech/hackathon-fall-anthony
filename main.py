@@ -398,7 +398,6 @@ def main():
                     if event.key == pygame.K_ESCAPE:
                         state = GAME_COMPLETE_FADE_OUT
                         pygame.mixer.music.stop()
-                elif state == GAME:
                     if event.key == pygame.K_SPACE:
                         hit = False
                         for note in notes:

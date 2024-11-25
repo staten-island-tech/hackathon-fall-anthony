@@ -2,11 +2,10 @@
 from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
-import pygame, pygame.gfxdraw, sys, random
+import pygame, pygame.gfxdraw, sys, random, os
 from mutagen.mp3 import MP3  # For reading MP3 file metadata
 from modules.note import Note
 from modules.utils import load_player, load_notes, check_note_hit, save_player  # Import save_player function
-import os
 
 # Initialize Pygame
 pygame.init()
@@ -395,6 +394,10 @@ def main():
                     if event.key in (pygame.K_RETURN, pygame.K_SPACE):
                         state = FADE_OUT
                         start_sound.play()
+                if state == GAME:
+                    if event.key == pygame.K_ESCAPE:
+                        state = GAME_COMPLETE_FADE_OUT
+                        pygame.mixer.music.stop()
                 elif state == GAME:
                     if event.key == pygame.K_SPACE:
                         hit = False

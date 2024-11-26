@@ -394,7 +394,7 @@ def main():
                     if event.key in (pygame.K_RETURN, pygame.K_SPACE):
                         state = FADE_OUT
                         start_sound.play()
-                if state == GAME:
+                elif state == GAME:
                     if event.key == pygame.K_ESCAPE:
                         state = GAME_COMPLETE_FADE_OUT
                         pygame.mixer.music.stop()

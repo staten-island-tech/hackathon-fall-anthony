@@ -394,17 +394,71 @@ def main():
                     if event.key in (pygame.K_RETURN, pygame.K_SPACE):
                         state = FADE_OUT
                         start_sound.play()
-                if state == GAME:
-                    if event.key == pygame.K_ESCAPE:
-                        state = GAME_COMPLETE_FADE_OUT
-                        pygame.mixer.music.stop()
-                    if event.key == pygame.K_SPACE:
+                elif state == GAME and 'note' in locals():
+                    if not note == note_instructions[-1]:
+                        if event.key == pygame.K_ESCAPE:
+                            state = GAME_COMPLETE_FADE_OUT
+                            pygame.mixer.music.stop()
+                        if event.key == pygame.K_SPACE:
+                            hit = False
+                            for note in notes:
+                                judgment = check_note_hit(note, bouncing_line_y)
+                                if judgment:
+                                    notes.remove(note)
+                                    feedback = judgment.upper()
+                                    feedback_timer = FEEDBACK_DURATION
+                                    feedback_scale = 1.0
+                                    feedback_x = note.x
+                                    feedback_y = note.y
+                                    total_notes += 1
+                                    hit = True
+                                    horizontal_effects.append(
+                                        {
+                                            'y': note.y,
+                                            'alpha': 255
+                                        }
+                                    )
+                                    vertical_effects.append(
+                                        {
+                                            'x': note.x,
+                                            'alpha': 255
+                                        }
+                                    )
+                                    if judgment == "perfect":
+                                        combo += 1
+                                        hit_notes += 1
+                                        score += 4044 * hit_notes // total_notes
+                                    elif judgment == "good":
+                                        combo = 0
+                                        hit_notes += 0.9
+                                        score += 3076 * hit_notes // total_notes
+                                    elif judgment == "bad":
+                                        combo = 0
+                                        hit_notes += 0.65
+                                        score += 1204 * hit_notes // total_notes
+                                    else:
+                                        combo = 0
+                            if not hit:
+                                feedback = "Miss"
+                                feedback_timer = FEEDBACK_DURATION
+                                feedback_scale = 1.0
+                                feedback_x = SCREEN_WIDTH // 2
+                                feedback_y = bouncing_line_y
+                                combo = 0
+                                total_notes += 1
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if state == MENU:
+                    if play_button.is_clicked(event.pos):
+                        play_button.clicked = True
+                        click_sound.play()
+                elif state == GAME:
+                    if not note == note_instructions[-1]:
                         hit = False
                         for note in notes:
                             judgment = check_note_hit(note, bouncing_line_y)
                             if judgment:
                                 notes.remove(note)
-                                feedback = judgment.upper()
+                                feedback = judgment.capitalize()
                                 feedback_timer = FEEDBACK_DURATION
                                 feedback_scale = 1.0
                                 feedback_x = note.x
@@ -433,7 +487,7 @@ def main():
                                     score += 3076 * hit_notes // total_notes
                                 elif judgment == "bad":
                                     combo = 0
-                                    hit_notes += 0.65
+                                    hit_notes += 0.6
                                     score += 1204 * hit_notes // total_notes
                                 else:
                                     combo = 0
@@ -445,58 +499,6 @@ def main():
                             feedback_y = bouncing_line_y
                             combo = 0
                             total_notes += 1
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if state == MENU:
-                    if play_button.is_clicked(event.pos):
-                        play_button.clicked = True
-                        click_sound.play()
-                elif state == GAME:
-                    hit = False
-                    for note in notes:
-                        judgment = check_note_hit(note, bouncing_line_y)
-                        if judgment:
-                            notes.remove(note)
-                            feedback = judgment.capitalize()
-                            feedback_timer = FEEDBACK_DURATION
-                            feedback_scale = 1.0
-                            feedback_x = note.x
-                            feedback_y = note.y
-                            total_notes += 1
-                            hit = True
-                            horizontal_effects.append(
-                                {
-                                    'y': note.y,
-                                    'alpha': 255
-                                }
-                            )
-                            vertical_effects.append(
-                                {
-                                    'x': note.x,
-                                    'alpha': 255
-                                }
-                            )
-                            if judgment == "perfect":
-                                combo += 1
-                                hit_notes += 1
-                                score += 4044 * hit_notes // total_notes
-                            elif judgment == "good":
-                                combo = 0
-                                hit_notes += 0.9
-                                score += 3076 * hit_notes // total_notes
-                            elif judgment == "bad":
-                                combo = 0
-                                hit_notes += 0.6
-                                score += 1204 * hit_notes // total_notes
-                            else:
-                                combo = 0
-                    if not hit:
-                        feedback = "Miss"
-                        feedback_timer = FEEDBACK_DURATION
-                        feedback_scale = 1.0
-                        feedback_x = SCREEN_WIDTH // 2
-                        feedback_y = bouncing_line_y
-                        combo = 0
-                        total_notes += 1
             if event.type == pygame.MOUSEBUTTONUP:
                 if state == MENU:
                     if play_button.clicked and play_button.is_clicked(event.pos):

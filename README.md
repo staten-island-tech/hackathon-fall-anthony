@@ -7,4 +7,4 @@
 * **Song Used:** XI - Freedom Dive (Cut)
 * **Tools Used for Assistance:** ChatGPT, Phind, GitHub Copilot
 * **Libaries Used:** `pygame`, `os`, `sys`, `random`, `mutagen`, `json`
-* **Time Spent:** ~33 hours
+* **Time Spent:** ~34 hours

@@ -1,8 +1,3 @@
-'''
-525720 - My new favorite number ...
-It's the highest possible score in the game!
-'''
-
 # Hide the Pygame support prompt
 from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
@@ -404,7 +399,7 @@ def main():
                         state = FADE_OUT
                         start_sound.play()
                 elif state == GAME and 'note' in locals():
-                    if not note == note_insRtructions[-1]:
+                    if not note == note_instructions[-1]:
                         if event.key == pygame.K_ESCAPE:
                             state = GAME_COMPLETE_FADE_OUT
                             pygame.mixer.music.stop()
@@ -510,6 +505,7 @@ def main():
                             total_notes += 1
             if event.type == pygame.MOUSEBUTTONUP:
                 if state == MENU:
+                    # If the play button is in the "clicked" state, meaning that the source of the click is the button, and the mouse button has just been released, then switch to the "GAME" state.
                     if play_button.clicked and play_button.is_clicked(event.pos):
                         state = FADE_OUT
                         start_sound.play()
@@ -612,3 +608,34 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+'''
+
+    I doubt anyone will ever read this, but I just wanted to express how glad
+    I am that this project is finally over.
+    
+    This project was the most painful project I've ever worked on. According to
+    the Spacetime Stats extension, this project took a total of 34 hours
+    to complete.
+
+    I decided to work on my own because my former teammate (Edin) did no work
+    at all. He only began his work after he was caught scrolling through his
+    phone during class. I got tired of doing all the work for him, so I
+    disbanded the team. His team name is still "Anthony & Edin" but we are
+    no longer working together.
+
+    After over a month, Edin has still done nothing to contribute to the final
+    project either. He has not even attempted to work on the project, and he
+    has not pushed a single commit to the project. I should probably work on
+    that project on my own as well.
+
+    This all probably would have never happened if I had just refused to help
+    him do everything the first day. He relied on me for nearly every task after
+    that. Only a few weeks ago, he asked me how to make a new file in VS Code.
+    This was likely all my fault in the first place, but I am just going to
+    leave him to his own devices from now on.
+    
+    (I know all of this sounds horrendously made-up, but it is all true. I am
+    going to end this note off hoping that at least someone will read this!)
+
+'''

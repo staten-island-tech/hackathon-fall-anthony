@@ -1,3 +1,8 @@
+'''
+525720 - My new favorite number ...
+It's the highest possible score in the game!
+'''
+
 # Hide the Pygame support prompt
 from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
@@ -395,7 +400,7 @@ def main():
                         state = FADE_OUT
                         start_sound.play()
                 elif state == GAME and 'note' in locals():
-                    if not note == note_instructions[-1]:
+                    if not note == note_insRtructions[-1]:
                         if event.key == pygame.K_ESCAPE:
                             state = GAME_COMPLETE_FADE_OUT
                             pygame.mixer.music.stop()

@@ -1,4 +1,17 @@
-'''
+r'''
+
+                         ___              ___   ___
+                        /HH/             /GI/   \MM\        
+                       /EE/             /VE/     \UU\       
+                      /LL/             /ME/       \CC\      
+                     /OO/             /A1/         \HH\     
+                    /WW/             /00/           \TT\    
+                    \OO\            /%P/            /HH/    
+                     \RR\          /LE/            /AA/     
+                      \LL\        /AS/            /NN/      
+                       \DD\      /E!/            /KK/       
+                        \!!\    /!!/            /SS/        
+                         ‾‾‾    ‾‾‾             ‾‾‾
 
 -=[=- CONTROLS -=]=-
 SPACE / LEFT MOUSE BUTTON: Catch the note.
@@ -613,30 +626,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-r'''
-
-    I doubt anyone will ever read this, but I just wanted to express how glad I am that this project is finally over.
-    
-    This project was the most painful project I've ever worked on. According to the Spacetime Stats extension, this project took a total of 34 hours to complete.
-
-    I decided to work on my own because my former teammate (Edin) did no work at all. He only began his work after he was caught scrolling through his phone during class. I got tired of doing all the work for him, so I disbanded the team. His team name is still "Anthony & Edin" but we are no longer working together.
-
-    After over a month, Edin has still done nothing to contribute to the final project either. He has not even attempted to work on the project, and he has not pushed a single commit to the project. I should probably work on that project on my own as well.
-
-    This all probably would have never happened if I had just refused to help him do everything the first day. He relied on me for nearly every task after that. Only a few weeks ago, he asked me how to make a new file in VS Code. This was probably all my fault in the first place, but I am just going to leave him to his own devices from now on.
-
-                         ___              ___   ___
-                        /HH/             /GI/   \MM\        
-                       /EE/             /VE/     \UU\       
-                      /LL/             /ME/       \CC\      
-                     /OO/             /A1/         \HH\     
-                    /WW/             /00/           \TT\    
-                    \OO\            /%P/            /HH/    
-                     \RR\          /LE/            /AA/     
-                      \LL\        /AS/            /NN/      
-                       \DD\      /E!/            /KK/       
-                        \!!\    /!!/            /SS/        
-                         ¯¯¯    ¯¯¯             ¯¯¯
-
-'''

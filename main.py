@@ -6,21 +6,11 @@ ESCAPE: Return to the main menu.
 
 -=[=- HOW TO PLAY -=]=-
 
-    There are three lines in this game: the upper and lower boundary lines, as
-    well as the bouncing line. The bouncing line moves up and down between
-    the boundary lines. However the speed of the bouncing line can vary at any
-    time.
+    There are three lines in this game: the upper and lower boundary lines, as well as the bouncing line. The bouncing line moves up and down between the boundary lines. However the speed of the bouncing line can vary at any time.
 
-    * A common mistake is catching the note exactly when the bouncing line collides
-    with a note. However, another factor to consider when playing the game is
-    the expanding inner circle within each note. The inner circle expands until it
-    has reached the radius of the outer circle, and then it shrinks until it
-    has fully dissipated. The player must catch the note when the bouncing
-    line hits the note and the inner circle has fully expanded.
+    * A common mistake is catching the note exactly when the bouncing line collides with a note. However, another factor to consider when playing the game is the expanding inner circle within each note. The inner circle expands until it has reached the radius of the outer circle, and then it shrinks until it has fully dissipated. The player must catch the note when the bouncing line hits the note and the inner circle has fully expanded.
 
-    The accuracy is determined by the player's precision in catching the notes.
-    A total score of 1,199,380 can be achieved if all notes are caught perfectly.
-    The number of consecutive perfect catches is also displayed as your combo.
+    The accuracy is determined by the player's precision in catching the notes. A total score of 1,199,380 can be achieved if all notes are caught perfectly. The number of consecutive perfect catches is also displayed as your combo.
     
     There are four types of judgments that can be made when catching a note:
         - Perfect: The note was caught at the perfect time. (MAX. 9,226 PTS.)
@@ -28,9 +18,7 @@ ESCAPE: Return to the main menu.
         - Bad: The note was caught at a bad time. (MAX. 1,967 PTS.)
         - Miss: The note was missed. (0 PTS.)
     
-    Your score increment for each note also depends on your accuracy. The higher
-    your accuracy, the more points you will receive for each note caught (except
-    for misses).
+    Your score increment for each note also depends on your accuracy. The higher your accuracy, the more points you will receive for each note caught (except for misses).
 
     Good luck and have fun!
 
@@ -41,9 +29,10 @@ from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 import pygame, sys, random, os
-from mutagen.mp3 import MP3  # For reading MP3 file metadata
+from mutagen.mp3 import MP3
 from modules.note import Note
-from modules.utils import load_player, load_notes, check_note_hit, save_player  # Import save_player function
+from modules.utils import load_player, load_notes, check_note_hit, save_player
+from modules.button import Button
 
 # Initialize Pygame
 pygame.init()
@@ -60,8 +49,8 @@ FPS = 60
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-RED = (248, 84, 84)
-BLUE = (66, 148, 248)
+RED = (252, 91, 91)
+BLUE = (71, 169, 255)
 GRAY = (200, 200, 200)
 
 # Font properties and text rendering
@@ -131,28 +120,6 @@ settings, note_instructions = load_notes('notes.json')
 top_line_y = settings['top_line_y']
 bottom_line_y = settings['bottom_line_y']
 line_speed = settings['line_speed']
-
-class Button:
-    'Button class for creating buttons (clickable images)'
-
-    def __init__(self, pos, pressed_pos, size, pressed_size, default_image_path, pressed_image_path):
-        self.pos = pos
-        self.pressed_pos = pressed_pos
-        self.size = size
-        self.pressed_size = pressed_size
-        self.default_image = pygame.image.load(default_image_path)
-        self.pressed_image = pygame.image.load(pressed_image_path)
-        self.rect = pygame.Rect(pos, size)
-        self.rect_pressed = pygame.Rect(pos, pressed_size)
-        self.clicked = False
-
-    def draw(self, screen):
-        image = self.pressed_image if self.clicked else self.default_image
-        image = pygame.transform.scale(image, self.size if not self.clicked else self.pressed_size)
-        screen.blit(image, self.pos if not self.clicked else self.pressed_pos)
-
-    def is_clicked(self, mouse_pos) -> bool:
-        return self.rect.collidepoint(mouse_pos)
 
 play_button = Button(
     (SCREEN_WIDTH // 2 - 77, SCREEN_HEIGHT // 2 + 60),  # Position of default button image
@@ -649,32 +616,15 @@ if __name__ == "__main__":
 
 r'''
 
-    I doubt anyone will ever read this, but I just wanted to express how glad
-    I am that this project is finally over.
+    I doubt anyone will ever read this, but I just wanted to express how glad I am that this project is finally over.
     
-    This project was the most painful project I've ever worked on. According to
-    the Spacetime Stats extension, this project took a total of 34 hours
-    to complete.
+    This project was the most painful project I've ever worked on. According to the Spacetime Stats extension, this project took a total of 34 hours to complete.
 
-    I decided to work on my own because my former teammate (Edin) did no work
-    at all. He only began his work after he was caught scrolling through his
-    phone during class. I got tired of doing all the work for him, so I
-    disbanded the team. His team name is still "Anthony & Edin" but we are
-    no longer working together.
+    I decided to work on my own because my former teammate (Edin) did no work at all. He only began his work after he was caught scrolling through his phone during class. I got tired of doing all the work for him, so I disbanded the team. His team name is still "Anthony & Edin" but we are no longer working together.
 
-    After over a month, Edin has still done nothing to contribute to the final
-    project either. He has not even attempted to work on the project, and he
-    has not pushed a single commit to the project. I should probably work on
-    that project on my own as well.
+    After over a month, Edin has still done nothing to contribute to the final project either. He has not even attempted to work on the project, and he has not pushed a single commit to the project. I should probably work on that project on my own as well.
 
-    This all probably would have never happened if I had just refused to help
-    him do everything the first day. He relied on me for nearly every task after
-    that. Only a few weeks ago, he asked me how to make a new file in VS Code.
-    This was likely all my fault in the first place, but I am just going to
-    leave him to his own devices from now on.
-    
-    (I know all of this sounds horrendously made-up, but it is all true. I am
-    going to end this note off hoping that at least someone will read this!)
+    This all probably would have never happened if I had just refused to help him do everything the first day. He relied on me for nearly every task after that. Only a few weeks ago, he asked me how to make a new file in VS Code. This was probably all my fault in the first place, but I am just going to leave him to his own devices from now on.
 
                          ___              ___   ___
                         /HH/             /GI/   \MM\        

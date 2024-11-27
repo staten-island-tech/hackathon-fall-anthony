@@ -3,9 +3,10 @@ from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 import pygame, sys, random, os
-from mutagen.mp3 import MP3  # For reading MP3 file metadata
+from mutagen.mp3 import MP3
 from modules.note import Note
-from modules.utils import load_player, load_notes, check_note_hit, save_player  # Import save_player function
+from modules.utils import load_player, load_notes, save_player
+from modules.button import Button
 
 # Initialize Pygame
 pygame.init()
@@ -23,7 +24,7 @@ FPS = 60
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (248, 84, 84)
-BLUE = (66, 148, 248)
+BLUE = (71, 169, 255)
 GRAY = (200, 200, 200)
 
 # Font properties and text rendering
@@ -93,28 +94,6 @@ settings, note_instructions = load_notes('notes.json')
 top_line_y = settings['top_line_y']
 bottom_line_y = settings['bottom_line_y']
 line_speed = settings['line_speed']
-
-class Button:
-    'Button class for creating buttons (clickable images)'
-
-    def __init__(self, pos, pressed_pos, size, pressed_size, default_image_path, pressed_image_path):
-        self.pos = pos
-        self.pressed_pos = pressed_pos
-        self.size = size
-        self.pressed_size = pressed_size
-        self.default_image = pygame.image.load(default_image_path)
-        self.pressed_image = pygame.image.load(pressed_image_path)
-        self.rect = pygame.Rect(pos, size)
-        self.rect_pressed = pygame.Rect(pos, pressed_size)
-        self.clicked = False
-
-    def draw(self, screen):
-        image = self.pressed_image if self.clicked else self.default_image
-        image = pygame.transform.scale(image, self.size if not self.clicked else self.pressed_size)
-        screen.blit(image, self.pos if not self.clicked else self.pressed_pos)
-
-    def is_clicked(self, mouse_pos) -> bool:
-        return self.rect.collidepoint(mouse_pos)
 
 play_button = Button(
     (SCREEN_WIDTH // 2 - 77, SCREEN_HEIGHT // 2 + 60),  # Position of default button image

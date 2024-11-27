@@ -2,7 +2,7 @@
 from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
-import pygame, pygame.gfxdraw, sys, random, os
+import pygame, sys, random, os
 from mutagen.mp3 import MP3  # For reading MP3 file metadata
 from modules.note import Note
 from modules.utils import load_player, load_notes, check_note_hit, save_player  # Import save_player function
@@ -494,7 +494,7 @@ def main():
                 if note_index < len(note_instructions) and note_timer > note_instructions[note_index]['time'] * FPS:
                     note = note_instructions[note_index]
                     if 'x' in note and 'y' in note:
-                        notes.append(Note(note['x'], note['y'], note.get('note_expand_speed', note_expand_speed), id=note.get('id')))
+                        notes.append(Note(note['x'], note['y'], note.get('note_expand_speed', note_expand_speed), line_direction))
                     if 'line_speed' in note:
                         line_speed = note['line_speed']
                     note_index += 1

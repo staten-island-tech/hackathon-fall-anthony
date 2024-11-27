@@ -1,17 +1,19 @@
-import pygame.gfxdraw
+import pygame.draw
 
 NOTE_RADIUS = 45
 WHITE = (255, 255, 255)
+RED = (248, 84, 84)
+BLUE = (66, 148, 248)
 
 class Note:
-    def __init__(self, x, y, expand_speed, id=None):
+    def __init__(self, x, y, expand_speed, line_direction=None, id=None):
         self.id = id
         self.x = x
         self.y = y
         self.progress = 0
         self.expand_speed = expand_speed
-        self.stay_timer = 0
         self.expanding = True
+        self.color = RED if line_direction == 1 else BLUE
 
     def expand(self):
         if self.expanding:  # Expand inner circle until it reaches the outer circle
@@ -24,6 +26,5 @@ class Note:
                 self.progress = 0
 
     def draw(self, screen):
-        # Anti-aliasing for higher-quality shapes
-        pygame.gfxdraw.aacircle(screen, self.x, self.y, NOTE_RADIUS, WHITE)
-        pygame.gfxdraw.filled_circle(screen, self.x, self.y, int(self.progress), WHITE)
+        pygame.draw.circle(screen, self.color, (self.x, self.y), int(self.progress))
+        pygame.draw.circle(screen, WHITE, (self.x, self.y), NOTE_RADIUS, 4)

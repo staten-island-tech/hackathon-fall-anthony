@@ -1,8 +1,46 @@
+'''
+
+-=[=- CONTROLS -=]=-
+SPACE / LEFT MOUSE BUTTON: Catch the note.
+ESCAPE: Return to the main menu.
+
+-=[=- HOW TO PLAY -=]=-
+
+    There are three lines in this game: the upper and lower boundary lines, as
+    well as the bouncing line. The bouncing line moves up and down between
+    the boundary lines. However the speed of the bouncing line can vary at any
+    time.
+
+    * A common mistake is catching the note exactly when the bouncing line collides
+    with a note. However, another factor to consider when playing the game is
+    the expanding inner circle within each note. The inner circle expands until it
+    has reached the radius of the outer circle, and then it shrinks until it
+    has fully dissipated. The player must catch the note when the bouncing
+    line hits the note and the inner circle has fully expanded.
+
+    The accuracy is determined by the player's precision in catching the notes.
+    A total score of 1,199,380 can be achieved if all notes are caught perfectly.
+    The number of consecutive perfect catches is also displayed as your combo.
+    
+    There are four types of judgments that can be made when catching a note:
+        - Perfect: The note was caught at the perfect time. (MAX. 9,226 PTS.)
+        - Good: The note was caught at a good time. (MAX. 5,703 PTS.)
+        - Bad: The note was caught at a bad time. (MAX. 1,967 PTS.)
+        - Miss: The note was missed. (0 PTS.)
+    
+    Your score increment for each note also depends on your accuracy. The higher
+    your accuracy, the more points you will receive for each note caught (except
+    for misses).
+
+    Good luck and have fun!
+
+'''
+
 # Hide the Pygame support prompt
 from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
-import pygame, pygame.gfxdraw, sys, random, os
+import pygame, sys, random, os
 from mutagen.mp3 import MP3  # For reading MP3 file metadata
 from modules.note import Note
 from modules.utils import load_player, load_notes, check_note_hit, save_player  # Import save_player function
@@ -177,7 +215,7 @@ def draw_menu():
     screen.blit(previous_score_text, (20, 20))
     screen.blit(previous_accuracy_text, (SCREEN_WIDTH - previous_accuracy_text.get_width() - 20, 20))
     screen.blit(best_score_text, (20, SCREEN_HEIGHT - best_score_text.get_height() - 20))
-    screen.blit(best_accuracy_text, (SCREEN_WIDTH - previous_accuracy_text.get_width() - 20, SCREEN_HEIGHT - best_accuracy_text.get_height() - 20))
+    screen.blit(best_accuracy_text, (SCREEN_WIDTH - best_accuracy_text.get_width() - 20, SCREEN_HEIGHT - best_accuracy_text.get_height() - 20))
 
     play_button.draw(screen)
 
@@ -431,15 +469,15 @@ def main():
                                     if judgment == "perfect":
                                         combo += 1
                                         hit_notes += 1
-                                        score += 4044 * hit_notes // total_notes
+                                        score += 9226 * hit_notes // total_notes
                                     elif judgment == "good":
                                         combo = 0
                                         hit_notes += 0.9
-                                        score += 3076 * hit_notes // total_notes
+                                        score += 5703 * hit_notes // total_notes
                                     elif judgment == "bad":
                                         combo = 0
                                         hit_notes += 0.65
-                                        score += 1204 * hit_notes // total_notes
+                                        score += 1967 * hit_notes // total_notes
                                     else:
                                         combo = 0
                             if not hit:
@@ -595,7 +633,7 @@ def main():
                 if note_index < len(note_instructions) and note_timer > note_instructions[note_index]['time'] * FPS:
                     note = note_instructions[note_index]
                     if 'x' in note and 'y' in note:
-                        notes.append(Note(note['x'], note['y'], note.get('note_expand_speed', note_expand_speed)))
+                        notes.append(Note(note['x'], note['y'], note.get('note_expand_speed', note_expand_speed), line_direction))
                     if 'line_speed' in note:
                         line_speed = note['line_speed']
                     note_index += 1
@@ -609,7 +647,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-'''
+r'''
 
     I doubt anyone will ever read this, but I just wanted to express how glad
     I am that this project is finally over.
@@ -637,5 +675,18 @@ if __name__ == "__main__":
     
     (I know all of this sounds horrendously made-up, but it is all true. I am
     going to end this note off hoping that at least someone will read this!)
+
+                         ___              ___   ___
+                        /HH/             /GI/   \MM\        
+                       /EE/             /VE/     \UU\       
+                      /LL/             /ME/       \CC\      
+                     /OO/             /A1/         \HH\     
+                    /WW/             /00/           \TT\    
+                    \OO\            /%P/            /HH/    
+                     \RR\          /LE/            /AA/     
+                      \LL\        /AS/            /NN/      
+                       \DD\      /E!/            /KK/       
+                        \!!\    /!!/            /SS/        
+                         ¯¯¯    ¯¯¯             ¯¯¯
 
 '''

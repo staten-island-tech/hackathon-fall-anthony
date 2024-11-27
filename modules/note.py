@@ -19,14 +19,14 @@ class Note:
 
     def expand(self):
         if self.expanding:  # Expand inner circle until it reaches the outer circle
-            self.progress += self.expand_speed
+            self.progress = min(self.progress + self.expand_speed, NOTE_RADIUS)  # Expand inner circle
             self.alpha = min(255, int((self.progress / NOTE_RADIUS) * 255))  # Calculate alpha value (based on expansion progress)
-            if self.progress >= NOTE_RADIUS:
+            if self.progress == NOTE_RADIUS:
                 self.expanding = False
         else:
-            self.progress -= self.expand_speed
+            self.progress = max(self.progress - self.expand_speed, 0)  # Shrink inner circle until it reaches the center
             self.alpha = max(0, int((self.progress / NOTE_RADIUS) * 255))  # Calculate alpha value (based on expansion progress)
-            if self.progress <= 0:
+            if self.progress == 0:
                 self.progress = 0
 
     def draw(self, screen):
@@ -35,6 +35,6 @@ class Note:
         screen.blit(alpha_surface, (0, 0))
         
         # If the note is expanding, decrease the radius of the outer circle from 125% to 100% its target radius. If the note is shrinking, increase the radius of the outer circle from 100% to 125% its target radius.
-        outer_radius = NOTE_RADIUS * (1.25 - 0.25 * (self.progress / NOTE_RADIUS)) if self.expanding else NOTE_RADIUS * (1 + 0.25 * (1 - self.progress / NOTE_RADIUS))
-        pygame.draw.circle(alpha_surface, (*WHITE, self.alpha), (self.x, self.y), int(outer_radius), 4)
+        outer_radius = NOTE_RADIUS * (1.5 - 0.5 * (self.progress / NOTE_RADIUS)) if self.expanding else NOTE_RADIUS * (1 + 0.5 * (1 - self.progress / NOTE_RADIUS))
+        pygame.draw.circle(alpha_surface, (*WHITE, self.alpha), (self.x, self.y), int(outer_radius), 6)
         screen.blit(alpha_surface, (0, 0))

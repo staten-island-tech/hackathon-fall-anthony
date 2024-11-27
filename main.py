@@ -20,7 +20,7 @@ ESCAPE: Return to the main menu.
     
     Your score increment for each note also depends on your accuracy. The higher your accuracy, the more points you will receive for each note caught (except for misses).
 
-    Good luck and have fun!
+    Good luck and have fun! Anything above 92% accuracy is excellent. ☺ ☺ ☺
 
 '''
 
@@ -411,7 +411,7 @@ def main():
                         if event.key == pygame.K_SPACE:
                             hit = False
                             for note in notes:
-                                judgment = check_note_hit(note, bouncing_line_y)
+                                judgment = check_note_hit(note, bouncing_line_y, line_speed)
                                 if judgment:
                                     notes.remove(note)
                                     feedback = judgment.upper()
@@ -464,7 +464,7 @@ def main():
                     if not note == note_instructions[-1]:
                         hit = False
                         for note in notes:
-                            judgment = check_note_hit(note, bouncing_line_y)
+                            judgment = check_note_hit(note, bouncing_line_y, line_speed)
                             if judgment:
                                 notes.remove(note)
                                 feedback = judgment.capitalize()

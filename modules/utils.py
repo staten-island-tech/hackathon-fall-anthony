@@ -27,16 +27,16 @@ def load_notes(filename) -> tuple:
         data = json.load(file)
     return data['settings'], data['notes']
 
-def check_note_hit(note, line_y) -> str:
+def check_note_hit(note, line_y, line_speed) -> str:
     if note.progress >= NOTE_RADIUS - 10:
-        if abs(note.y - line_y) <= NOTE_RADIUS * 1.25:
+        if abs(note.y - line_y) <= NOTE_RADIUS * line_speed / 6:
             return "perfect"
-        elif abs(note.y - line_y) <= NOTE_RADIUS * 2.5:
+        elif abs(note.y - line_y) <= NOTE_RADIUS * line_speed / 3:
             return "good"
     elif note.progress >= NOTE_RADIUS - 20:
-        if abs(note.y - line_y) <= NOTE_RADIUS * 1.25:
+        if abs(note.y - line_y) <= NOTE_RADIUS * line_speed / 6:
             return "good"
-        elif abs(note.y - line_y) <= NOTE_RADIUS * 2.5:
+        elif abs(note.y - line_y) <= NOTE_RADIUS * line_speed / 3:
             return "bad"
     return None
 

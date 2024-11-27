@@ -14,7 +14,7 @@ r'''
                          ‾‾‾    ‾‾‾             ‾‾‾
 
 -=[=- CONTROLS -=]=-
-SPACE / LEFT MOUSE BUTTON: Catch the note.
+SPACE / MOUSE BUTTON: Catch the note.
 ESCAPE: Return to the main menu.
 
 -=[=- HOW TO PLAY -=]=-

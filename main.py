@@ -460,7 +460,7 @@ def main():
                     if play_button.is_clicked(event.pos):
                         play_button.clicked = True
                         click_sound.play()
-                elif state == GAME:
+                elif state == GAME and 'note' in locals():
                     if not note == note_instructions[-1]:
                         hit = False
                         for note in notes:

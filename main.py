@@ -187,20 +187,16 @@ bottom_line_bounce = 0
 
 # Initial label positions
 song_x = SCREEN_WIDTH
-credit_x = -300
 
 def draw_game() -> None:
-    global score, combo, bouncing_line_y, line_direction, feedback, feedback_timer, feedback_scale, feedback_x, feedback_y, total_notes, hit_notes, bounce_speed, top_line_bounce, bottom_line_bounce, song_x,credit_x, score_percentage, score_rating, accuracy
+    global score, combo, bouncing_line_y, line_direction, feedback, feedback_timer, feedback_scale, feedback_x, feedback_y, total_notes, hit_notes, bounce_speed, top_line_bounce, bottom_line_bounce, song_x, score_percentage, score_rating, accuracy
     
     screen.fill(BLACK)
     
     # Scrolling label for song title
     song = small_font.render("XI - FREEDOM DIVE", True, (24, 24, 24))
     song_x -= 1 / FPS / song_length * (SCREEN_WIDTH + song.get_width())
-    credit = small_font.render("THANK YOU FOR PLAYING!", True, (24, 24, 24))
-    credit_x += 1 / FPS / song_length * (SCREEN_WIDTH + credit.get_width())
     screen.blit(song, (song_x, top_line_y + 15))
-    screen.blit(credit, (credit_x, bottom_line_y - 40))
 
     draw_particles()  # Draw the particles on the screen
 

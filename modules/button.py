@@ -3,7 +3,7 @@ import pygame
 class Button:
     'Button class for creating buttons as clickable images and handling their states'
 
-    def __init__(self, pos, pressed_pos, size, pressed_size, default_image_path, pressed_image_path):
+    def __init__(self, pos, pressed_pos, size, pressed_size, default_image_path, pressed_image_path) -> None:
         self.pos = pos
         self.pressed_pos = pressed_pos
         self.size = size
@@ -14,7 +14,7 @@ class Button:
         self.rect_pressed = pygame.Rect(pos, pressed_size)
         self.clicked = False
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         image = self.pressed_image if self.clicked else self.default_image
         image = pygame.transform.scale(image, self.size if not self.clicked else self.pressed_size)
         screen.blit(image, self.pos if not self.clicked else self.pressed_pos)

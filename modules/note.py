@@ -6,7 +6,7 @@ RED = (252, 91, 91)
 BLUE = (71, 169, 255)
 
 class Note:
-    def __init__(self, x, y, expand_speed, line_direction=None, id=None):
+    def __init__(self, x, y, expand_speed, line_direction=None, id=None) -> None:
         self.id = id
         self.x = x
         self.y = y
@@ -17,7 +17,7 @@ class Note:
         self.color = RED if line_direction == 1 else BLUE  # The line direction also determines the last boundary line touched
         self.alpha = 0  # Initial opacity
 
-    def expand(self):
+    def expand(self) -> None:
         if self.expanding:  # Expand inner circle until it reaches the outer circle
             self.progress = min(self.progress + self.expand_speed, NOTE_RADIUS)  # Expand inner circle
             self.alpha = min(255, int((self.progress / NOTE_RADIUS) * 255))  # Calculate alpha value (based on expansion progress)
@@ -29,7 +29,7 @@ class Note:
             if self.progress == 0:
                 self.progress = 0
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         alpha_surface = pygame.Surface((screen.get_width(), screen.get_height()), pygame.SRCALPHA)
         pygame.draw.circle(alpha_surface, (*self.color, min(self.alpha, 172)), (self.x, self.y), int(self.progress)) 
         screen.blit(alpha_surface, (0, 0))

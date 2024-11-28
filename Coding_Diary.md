@@ -1,6 +1,6 @@
-# ChatGPT Coding Diary
+# AI Coding Diary
 
-## Project Name: _Hackathon Project: Rhythm Game_
+## Project Name: _Hackathon Rhythm Game_
 
 ### Date: _11/22/2024_
 
@@ -67,20 +67,20 @@ while True:
 ```
 
 - What was your plan for solving the problem?
-  - Lay the foundations for the game, then allow ChatGPT to expand on it and set up the baseline for the game.
-- Did you have any initial thoughts or strategies before using ChatGPT?
+  - Lay the foundations for the game, then allow AI to expand on it and set up the baseline for the game.
+- Did you have any initial thoughts or strategies before using AI?
   - Set up the variables and the basic layout of the game. Display the menu screen and add basic controls.
 
 ---
 
-## 3. **Interaction with ChatGPT**
+## 3. **Interaction with AI**
 
-### Questions/Requests to ChatGPT
+### Questions/Requests to AI
 
-Write down the questions or requests you made to ChatGPT.
-Also include what code from ChatGPT you are unsure of and craft a question that asks for further clarification.
+Write down the questions or requests you made to AI.
+Also include what code from AI you are unsure of and craft a question that asks for further clarification.
 
-- N/A; I understand all of the code that ChatGPT returned.
+- N/A; I understand all of the code that AI returned.
 
 ```text
 - Use the `json` library to import and cache notes from `notes.json`. Store attributes like `line_speed` and `note_expand_speed` into variables so that they can be loaded into the game later on.
@@ -92,11 +92,11 @@ Also include what code from ChatGPT you are unsure of and craft a question that 
 
 ---
 
-## 4. **ChatGPT's Suggestions/Code Changes**
+## 4. **AI's Suggestions/Code Changes**
 
-Record the code or suggestions ChatGPT provided. Include any changes or improvements ChatGPT suggested and how it influenced your approach.
+Record the code or suggestions AI provided. Include any changes or improvements AI suggested and how it influenced your approach.
 
-In the code below, ChatGPT actually did not draw the flashing boundary line colors correctly; however, I thought this version actually looked better, so I decided to keep it.
+In the code below, AI actually did not draw the flashing boundary line colors correctly; however, I thought this version actually looked better, so I decided to keep it.
 
 ```python
 def update_line_position():
@@ -117,7 +117,7 @@ def update_line_position():
             boundary_effects.append({'y': bouncing_line_y + bottom_line_bounce, 'alpha': 255, 'color': BLUE})
 ```
 
-Below is the code that ChatGPT initially returned for the `note.py` module. I later added anti-aliasing to allow for higher-quality shapes.
+Below is the code that AI initially returned for the `note.py` module. I later added anti-aliasing to allow for higher-quality shapes.
 
 ```python
 import pygame
@@ -150,8 +150,8 @@ class Note:
         pygame.draw.circle(screen, WHITE, (self.x, self.y), int(self.progress))
 ```
 
-- What was ChatGPT's solution or suggestion?
-  - ChatGPT separated the code into different classes/modules for better organization.
+- What was AI's solution or suggestion?
+  - AI separated the code into different classes/modules for better organization.
 - How did it differ from your original approach?
   - I originally planned to put everything into one file, but I then realized that the code would look very overwhelming and difficult to read.
 
@@ -159,17 +159,17 @@ class Note:
 
 ## 5. **Reflection on Changes**
 
-Reflect on the changes made to your code after ChatGPT's suggestions. Answer the following questions:
+Reflect on the changes made to your code after AI's suggestions. Answer the following questions:
 
-- Why do you think ChatGPT's suggestions are helpful or relevant?
-- ChatGPT is great at code organization and generating basic mechanics for projects. Using ChatGPT to set the baseline for your project can be great, as it helps you expand on your ideas and carry them out with ease.
+- Why do you think AI's suggestions are helpful or relevant?
+- AI is great at code organization and generating basic mechanics for projects. Using AI to set the baseline for your project can be great, as it helps you expand on your ideas and carry them out with ease.
 - Did the suggestions improve your code? How?
 
-  - The suggestions did improve my code. As mentioned previously, my code was very messy and unorganized, and ChatGPT suggested that I organize major functions/classes into their own files so that it would be easier to read.
+  - The suggestions did improve my code. As mentioned previously, my code was very messy and unorganized, and AI suggested that I organize major functions/classes into their own files so that it would be easier to read.
 - Did you understand why the changes were made, or are you still uncertain about some parts?
 
-  - Yes, I understood why the changes were made. After examining the code that ChatGPT returned, I was able to fully grasp the concepts used. I was later able to reapply the techniques on different mechanics of the game.
-    - For example, I was stuck on creating the fade-in animation that was meant to be played upon pressing the `PLAY` button. It kept appearing empty, with no animation at all. ChatGPT helped me fix my code by mentioning how I needed to draw the game elements first, then draw the overlay.
+  - Yes, I understood why the changes were made. After examining the code that AI returned, I was able to fully grasp the concepts used. I was later able to reapply the techniques on different mechanics of the game.
+    - For example, I was stuck on creating the fade-in animation that was meant to be played upon pressing the `PLAY` button. It kept appearing empty, with no animation at all. AI helped me fix my code by mentioning how I needed to draw the game elements first, then draw the overlay.
       ```python
       if fade_alpha > 0:
           fade_alpha -= 5
@@ -188,9 +188,9 @@ After making the changes, did you test your code? What were the results?
 - Did you run any tests (e.g., unit tests, edge cases)?
 
   - I ran a few tests to see if the code worked. There were some bugs, but I was able to get them fixed quickly.
-- Did the code work as expected after incorporating ChatGPT's changes?
+- Did the code work as expected after incorporating AI's changes?
 
-  - The code did not work exactly as I expected. As I mentioned earlier, ChatGPT did not draw the flashing boundary line colors correctly. However, I decided to keep it anyway since it looked better then my original plan.
+  - The code did not work exactly as I expected. As I mentioned earlier, AI did not draw the flashing boundary line colors correctly. However, I decided to keep it anyway since it looked better then my original plan.
 - Did you encounter any bugs or issues during testing?
 
   - The program also ran into several issues due to some missing variables. I simply fixed these by initializing the missing variables with filler values (e.g., `None` or `0`) that are changed later in the game.

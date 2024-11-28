@@ -1,5 +1,4 @@
-r'''
-
+r"""
                          ___              ___   ___
                         /HH/             /GI/   \MM\        
                        /EE/             /VE/     \UU\       
@@ -12,34 +11,11 @@ r'''
                        \DD\      /E!/            /KK/       
                         \!!\    /!!/            /SS/        
                          ‾‾‾    ‾‾‾             ‾‾‾
-
--=[=- CONTROLS -=]=-
-SPACE / MOUSE BUTTON: Catch the note.
-ESCAPE: Return to the main menu.
-
--=[=- HOW TO PLAY -=]=-
-
-    There are three lines in this game: the upper and lower boundary lines, as well as the bouncing line. The bouncing line moves up and down between the boundary lines. However the speed of the bouncing line can vary at any time.
-
-    * A common mistake is catching the note exactly when the bouncing line collides with a note. However, another factor to consider when playing the game is the expanding inner circle within each note. The inner circle expands until it has reached the radius of the outer circle, and then it shrinks until it has fully dissipated. The player must catch the note when the bouncing line hits the note and the inner circle has fully expanded.
-
-    The accuracy is determined by the player's precision in catching the notes. A total score of 1,199,380 can be achieved if all notes are caught perfectly. The number of consecutive perfect catches is also displayed as your combo.
-    
-    There are four types of judgments that can be made when catching a note:
-        - Perfect: The note was caught at the perfect time. (MAX. 9,226 PTS.)
-        - Good: The note was caught at a good time. (MAX. 5,703 PTS.)
-        - Bad: The note was caught at a bad time. (MAX. 1,967 PTS.)
-        - Miss: The note was missed. (0 PTS.)
-    
-    Your score increment for each note also depends on your accuracy. The higher your accuracy, the more points you will receive for each note caught (except for misses).
-
-    Good luck and have fun! Anything above 92% accuracy is excellent. ☺ ☺ ☺
-
-'''
+"""
 
 # Hide the Pygame support prompt
 from os import environ
-environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 
 import pygame, sys, random, os
 from mutagen.mp3 import MP3
@@ -51,7 +27,8 @@ from modules.button import Button
 pygame.init()
 
 # Screen dimensions
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Pulsebound: Freedom Dive")
 pygame.display.set_icon(pygame.image.load("./images/icon.png"))
@@ -74,15 +51,15 @@ small_font = pygame.font.Font(font_path, 24)  # Small font
 tiny_font = pygame.font.Font(font_path, 18)  # Tiny font
 
 # Menu song properties
-menu_song = pygame.mixer.Sound('./songs/new_morning_new_sun.wav')
+menu_song = pygame.mixer.Sound("./songs/new_morning_new_sun.wav")
 menu_song.set_volume(0.5)
 menu_song_playing = False
 
 # Load sound effects
-click_sound = pygame.mixer.Sound('./sfx/press.wav')  # Button click SFX
-start_sound = pygame.mixer.Sound('./sfx/start.wav')  # Game start SFX (game begins)
-countdown_sound = pygame.mixer.Sound('./sfx/countdown.wav')  # Countdown SFX
-countdown_end_sound = pygame.mixer.Sound('./sfx/countdown_end.wav')  # Game begin SFX (countdown finished)
+click_sound = pygame.mixer.Sound("./sfx/press.wav")  # Button click SFX
+start_sound = pygame.mixer.Sound("./sfx/start.wav")  # Game start SFX (game begins)
+countdown_sound = pygame.mixer.Sound("./sfx/countdown.wav")  # Countdown SFX
+countdown_end_sound = pygame.mixer.Sound("./sfx/countdown_end.wav")  # Game begin SFX (countdown finished)
 countdown_sound.set_volume(0.5)
 countdown_end_sound.set_volume(0.5)
 
@@ -102,6 +79,9 @@ note_expand_speed = 1  # Default note expansion speed (1)
 # Score
 score = 0  # Player score
 combo = 0  # Combo counter
+PERFECT_INCREMENT = 9226  # Perfect note score increment
+GOOD_INCREMENT = 5703  # Good note score increment
+BAD_INCREMENT = 1967  # Bad note score increment
 
 # Bouncing line
 LINE_WIDTH = 5
@@ -129,10 +109,10 @@ vertical_effects = []  # Vertical line display (for note hits)
 
 # Cache the notes and settings from notes.json
 notes = []
-settings, note_instructions = load_notes('notes.json')
-top_line_y = settings['top_line_y']
-bottom_line_y = settings['bottom_line_y']
-line_speed = settings['line_speed']
+settings, note_instructions = load_notes("notes.json")
+top_line_y = settings["top_line_y"]
+bottom_line_y = settings["bottom_line_y"]
+line_speed = settings["line_speed"]
 
 play_button = Button(
     (SCREEN_WIDTH // 2 - 77, SCREEN_HEIGHT // 2 + 60),  # Position of default button image
@@ -146,34 +126,34 @@ play_button = Button(
 # Background particles
 particles = [
     {
-        'x': random.randint(0, SCREEN_WIDTH),  # Initial x-position
-        'y': random.randint(0, SCREEN_HEIGHT),  # Initial y-position
-        'dx': random.uniform(-0.2, 0.2),  # Horizontal change
-        'dy': random.uniform(-0.2, 0.2),  # Vertical change
-        'alpha': random.randint(50, 150)  # Generate a random alpha value between 50 and 150
+        "x": random.randint(0, SCREEN_WIDTH),  # Initial x-position
+        "y": random.randint(0, SCREEN_HEIGHT),  # Initial y-position
+        "dx": random.uniform(-0.2, 0.2),  # Horizontal change
+        "dy": random.uniform(-0.2, 0.2),  # Vertical change
+        "alpha": random.randint(50, 150)  # Generate a random alpha value between 50 and 150
     }
     for _ in range(50)  # Create 50 particles (repeat the dictionary creation 50 times)
 ]
 
-def update_particles():
+def update_particles() -> None:
     for particle in particles:
-        particle['x'] += particle['dx']
-        particle['y'] += particle['dy']
-        if not 0 < particle['x'] < SCREEN_WIDTH:
+        particle["x"] += particle["dx"]
+        particle["y"] += particle["dy"]
+        if not 0 < particle["x"] < SCREEN_WIDTH:
             # Reverse the horizontal direction if the particle reaches the left or right edge of the screen
-            particle['dx'] *= -1
-        if not 0 < particle['y'] < SCREEN_HEIGHT:
+            particle["dx"] *= -1
+        if not 0 < particle["y"] < SCREEN_HEIGHT:
             # Reverse the vertical direction if the particle reaches the top or bottom edge of the screen
-            particle['dy'] *= -1
+            particle["dy"] *= -1
 
-def draw_particles():
+def draw_particles() -> None:
     for particle in particles:
         # Create a surface and blit the particle onto it (to allow for alpha options)
         particle_surface = pygame.Surface((4, 4), pygame.SRCALPHA)
-        particle_surface.fill((255, 255, 255, particle['alpha']))
-        screen.blit(particle_surface, (int(particle['x']), int(particle['y'])))
+        particle_surface.fill((255, 255, 255, particle["alpha"]))
+        screen.blit(particle_surface, (int(particle["x"]), int(particle["y"])))
 
-def draw_menu():
+def draw_menu() -> None:
     screen.fill(BLACK)
 
     draw_particles()
@@ -182,9 +162,9 @@ def draw_menu():
 
     title_text = font.render("PULSEBOUND", True, WHITE)
     subtitle_text = subtitle_font.render("FREEDOM DIVE", True, GRAY)
-    previous_score_text = tiny_font.render(f"LAST SCORE {player['previous_score']}", True, (140, 140, 140))
+    previous_score_text = tiny_font.render(f"LAST SCORE {player['previous_score']} ({player['previous_rating']})", True, (140, 140, 140))
     previous_accuracy_text = tiny_font.render(f"LAST ACCURACY {player['previous_accuracy']:.2f}%", True, (140, 140, 140))
-    best_score_text = tiny_font.render(f"BEST SCORE {player['best_score']}", True, (140, 140, 140))
+    best_score_text = tiny_font.render(f"BEST SCORE {player['best_score']} ({player['best_rating']})", True, (140, 140, 140))
     best_accuracy_text = tiny_font.render(f"BEST ACCURACY {player['best_accuracy']:.2f}%", True, (140, 140, 140))
 
     title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100))
@@ -205,21 +185,22 @@ bounce_speed = line_speed / 3
 top_line_bounce = 0
 bottom_line_bounce = 0
 
-# Label (for song) position
-label_x = SCREEN_WIDTH
-thanks_x = -300
+# Initial label positions
+song_x = SCREEN_WIDTH
+credit_x = -300
 
-def draw_game():
-    global score, combo, bouncing_line_y, line_direction, feedback, feedback_timer, feedback_scale, feedback_x, feedback_y, total_notes, hit_notes, bounce_speed, top_line_bounce, bottom_line_bounce, label_x, thanks_x
+def draw_game() -> None:
+    global score, combo, bouncing_line_y, line_direction, feedback, feedback_timer, feedback_scale, feedback_x, feedback_y, total_notes, hit_notes, bounce_speed, top_line_bounce, bottom_line_bounce, song_x,credit_x, score_percentage, score_rating, accuracy
+    
     screen.fill(BLACK)
     
     # Scrolling label for song title
-    label = small_font.render("XI - FREEDOM DIVE", True, (24, 24, 24))
-    label_x -= 1 / FPS / song_length * (SCREEN_WIDTH + label.get_width())
-    thanks = small_font.render("THANK YOU FOR PLAYING!", True, (24, 24, 24))
-    thanks_x += 1 / FPS / song_length * (SCREEN_WIDTH + thanks.get_width())
-    screen.blit(label, (label_x, top_line_y + 15))
-    screen.blit(thanks, (thanks_x, bottom_line_y - 40))
+    song = small_font.render("XI - FREEDOM DIVE", True, (24, 24, 24))
+    song_x -= 1 / FPS / song_length * (SCREEN_WIDTH + song.get_width())
+    credit = small_font.render("THANK YOU FOR PLAYING!", True, (24, 24, 24))
+    credit_x += 1 / FPS / song_length * (SCREEN_WIDTH + credit.get_width())
+    screen.blit(song, (song_x, top_line_y + 15))
+    screen.blit(credit, (credit_x, bottom_line_y - 40))
 
     draw_particles()  # Draw the particles on the screen
 
@@ -253,9 +234,9 @@ def draw_game():
         top_line_bounce = -BOUNCE_DISTANCE
         boundary_effects.append(
             {
-                'y': bouncing_line_y + top_line_bounce,
-                'alpha': 255,
-                'color': RED
+                "y": bouncing_line_y + top_line_bounce,
+                "alpha": 255,
+                "color": RED
             }
         )
     elif bouncing_line_y >= bottom_line_y:
@@ -264,9 +245,9 @@ def draw_game():
         bottom_line_bounce = BOUNCE_DISTANCE
         boundary_effects.append(
             {
-                'y': bouncing_line_y + bottom_line_bounce,
-                'alpha': 255,
-                'color': BLUE
+                "y": bouncing_line_y + bottom_line_bounce,
+                "alpha": 255,
+                "color": BLUE
             }
         )
 
@@ -291,37 +272,48 @@ def draw_game():
             total_notes += 1
 
     for effect in boundary_effects:
-        effect['alpha'] -= line_speed
-        if effect['alpha'] < 0:
-            effect['alpha'] = 0
+        effect["alpha"] -= line_speed
+        if effect["alpha"] < 0:
+            effect["alpha"] = 0
         effect_surface = pygame.Surface((SCREEN_WIDTH, 10))
-        effect_surface.set_alpha(effect['alpha'])
-        effect_surface.fill(effect['color']) 
-        screen.blit(effect_surface, (0, effect['y'] - 4))
-    boundary_effects[:] = [effect for effect in boundary_effects if effect['alpha'] > 0]
+        effect_surface.set_alpha(effect["alpha"])
+        effect_surface.fill(effect["color"]) 
+        screen.blit(effect_surface, (0, effect["y"] - 4))
+    boundary_effects[:] = [effect for effect in boundary_effects if effect["alpha"] > 0]
 
     for effect in horizontal_effects:
-        effect['alpha'] -= 15
-        if effect['alpha'] < 0:
-            effect['alpha'] = 0
+        effect["alpha"] -= 15
+        if effect["alpha"] < 0:
+            effect["alpha"] = 0
         effect_surface = pygame.Surface((SCREEN_WIDTH, 5))
-        effect_surface.set_alpha(effect['alpha'])
+        effect_surface.set_alpha(effect["alpha"])
         effect_surface.fill(GRAY)
-        screen.blit(effect_surface, (0, effect['y']))
-    horizontal_effects[:] = [effect for effect in horizontal_effects if effect['alpha'] > 0]
+        screen.blit(effect_surface, (0, effect["y"]))
+    horizontal_effects[:] = [effect for effect in horizontal_effects if effect["alpha"] > 0]
 
     for effect in vertical_effects:
-        effect['alpha'] -= 15
-        if effect['alpha'] < 0:
-            effect['alpha'] = 0
+        effect["alpha"] -= 15
+        if effect["alpha"] < 0:
+            effect["alpha"] = 0
         effect_surface = pygame.Surface((5, bottom_line_y - top_line_y))
-        effect_surface.set_alpha(effect['alpha'])
+        effect_surface.set_alpha(effect["alpha"])
         effect_surface.fill(GRAY)
-        screen.blit(effect_surface, (effect['x'], top_line_y))
-    vertical_effects[:] = [effect for effect in vertical_effects if effect['alpha'] > 0]
+        screen.blit(effect_surface, (effect["x"], top_line_y))
+    vertical_effects[:] = [effect for effect in vertical_effects if effect["alpha"] > 0]
 
-    score_text = small_font.render(f"SCORE {int(score)}", True, WHITE)
+    score_percentage = score / (PERFECT_INCREMENT * max(note["id"] for note in note_instructions if "id" in note)) * 100
+    score_rating = (
+        "S+" if score_percentage == 100 else
+        "S" if score_percentage >= 250 / 3 else
+        "A" if score_percentage >= 200 / 3 else
+        "B" if score_percentage >= 50 else
+        "C" if score_percentage >= 100 / 3 else
+        "D" if score_percentage >= 50 / 3 else
+        "F"
+    )
     accuracy = (hit_notes / total_notes * 100) if total_notes > 0 else 0
+
+    score_text = small_font.render(f"SCORE {score} ({score_rating})", True, WHITE)
     accuracy_text = small_font.render(f"ACCURACY {accuracy:.2f}%", True, WHITE)
     screen.blit(score_text, (20, 20))
     screen.blit(accuracy_text, (SCREEN_WIDTH - accuracy_text.get_width() - 20, 20))
@@ -337,56 +329,56 @@ def draw_game():
         feedback_text.set_alpha(feedback_alpha)
         feedback_text = pygame.transform.scale(feedback_text, (int(feedback_text.get_width() * feedback_scale), int(feedback_text.get_height() * feedback_scale)))
         screen.blit(feedback_text, (feedback_x - feedback_text.get_width() // 2, feedback_y - feedback_text.get_height() // 2))
+
         feedback_timer -= 1
 
-def update_line_position():
+def update_line_position() -> None:
     global bouncing_line_y, line_direction, top_line_bounce, bottom_line_bounce
 
     # Update line position
     bouncing_line_y += line_speed * line_direction
 
     # Check for boundary collisions
-    if bouncing_line_y >= settings['bottom_line_y'] or bouncing_line_y <= settings['top_line_y']:
+    if bouncing_line_y >= settings["bottom_line_y"] or bouncing_line_y <= settings["top_line_y"]:
         line_direction *= -1
-        bouncing_line_y = max(min(bouncing_line_y, settings['bottom_line_y']), settings['top_line_y'])
-        if bouncing_line_y == settings['top_line_y']:
+        bouncing_line_y = max(min(bouncing_line_y, settings["bottom_line_y"]), settings["top_line_y"])
+        if bouncing_line_y == settings["top_line_y"]:
             top_line_bounce = -BOUNCE_DISTANCE
             boundary_effects.append(
                 {
-                    'y': bouncing_line_y + top_line_bounce,
-                    'alpha': 255,
-                    'color': RED
+                    "y": bouncing_line_y + top_line_bounce,
+                    "alpha": 255,
+                    "color": RED
                 }
             )
         else:
             bottom_line_bounce = BOUNCE_DISTANCE
             boundary_effects.append(
                 {
-                    'y': bouncing_line_y + bottom_line_bounce,
-                    'alpha': 255,
-                    'color': BLUE
+                    "y": bouncing_line_y + bottom_line_bounce,
+                    "alpha": 255,
+                    "color": BLUE
                 }
             )
 
-pygame.mixer.music.load('./songs/freedom_dive.mp3')
+pygame.mixer.music.load("./songs/freedom_dive.mp3")
 pygame.mixer.music.set_volume(0.4)
-song = MP3('./songs/freedom_dive.mp3')
+song = MP3("./songs/freedom_dive.mp3")
 song_length = song.info.length
 
-def save_player_data():
-    global score, total_notes, hit_notes
-    
-    accuracy = (hit_notes / total_notes * 100) if total_notes > 0 else 0
+def save_player_data() -> None:
     player = load_player("./player.json")
-    player["previous_score"] = int(score)
+    player["previous_score"] = score
+    player["previous_rating"] = score_rating
     player["previous_accuracy"] = round(accuracy, 2)
-    if int(score) > player["best_score"]:
-        player["best_score"] = int(score)
-    if round(accuracy, 2) > player["best_accuracy"]:
-        player["best_accuracy"] = round(accuracy, 2)
+    if player["previous_score"] > player["best_score"]:
+        player["best_score"] = player["previous_score"]
+        player["best_rating"] = player["previous_rating"]
+    if round(player["previous_accuracy"], 2) > player["best_accuracy"]:
+        player["best_accuracy"] = round(player["previous_accuracy"], 2)
     save_player("./player.json", player)
 
-def restart_program():
+def restart_program() -> None:
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 def main():
@@ -396,7 +388,7 @@ def main():
     note_timer = 0
 
     # Set initial line speed from settings
-    line_speed = settings['line_speed']
+    line_speed = settings["line_speed"]
 
     # Initialize the fade surface and its properties
     fade_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
@@ -416,12 +408,12 @@ def main():
                     if event.key in (pygame.K_RETURN, pygame.K_SPACE):
                         state = FADE_OUT
                         start_sound.play()
-                elif state == GAME and 'note' in locals():
+                elif state == GAME and "note" in locals():
                     if not note == note_instructions[-1]:
                         if event.key == pygame.K_ESCAPE:
                             state = GAME_COMPLETE_FADE_OUT
                             pygame.mixer.music.stop()
-                        if event.key == pygame.K_SPACE:
+                        else:
                             hit = False
                             for note in notes:
                                 judgment = check_note_hit(note, bouncing_line_y, line_speed)
@@ -436,28 +428,28 @@ def main():
                                     hit = True
                                     horizontal_effects.append(
                                         {
-                                            'y': note.y,
-                                            'alpha': 255
+                                            "y": note.y,
+                                            "alpha": 255
                                         }
                                     )
                                     vertical_effects.append(
                                         {
-                                            'x': note.x,
-                                            'alpha': 255
+                                            "x": note.x,
+                                            "alpha": 255
                                         }
                                     )
                                     if judgment == "perfect":
                                         combo += 1
                                         hit_notes += 1
-                                        score += 9226 * hit_notes // total_notes
+                                        score += int(PERFECT_INCREMENT * hit_notes / total_notes)
                                     elif judgment == "good":
                                         combo = 0
                                         hit_notes += 0.9
-                                        score += 5703 * hit_notes // total_notes
+                                        score += int(GOOD_INCREMENT * hit_notes / total_notes)
                                     elif judgment == "bad":
                                         combo = 0
                                         hit_notes += 0.65
-                                        score += 1967 * hit_notes // total_notes
+                                        score += int(BAD_INCREMENT * hit_notes / total_notes)
                                     else:
                                         combo = 0
                             if not hit:
@@ -473,7 +465,7 @@ def main():
                     if play_button.is_clicked(event.pos):
                         play_button.clicked = True
                         click_sound.play()
-                elif state == GAME and 'note' in locals():
+                elif state == GAME and "note" in locals():
                     if not note == note_instructions[-1]:
                         hit = False
                         for note in notes:
@@ -489,28 +481,28 @@ def main():
                                 hit = True
                                 horizontal_effects.append(
                                     {
-                                        'y': note.y,
-                                        'alpha': 255
+                                        "y": note.y,
+                                        "alpha": 255
                                     }
                                 )
                                 vertical_effects.append(
                                     {
-                                        'x': note.x,
-                                        'alpha': 255
+                                        "x": note.x,
+                                        "alpha": 255
                                     }
                                 )
                                 if judgment == "perfect":
                                     combo += 1
                                     hit_notes += 1
-                                    score += 4044 * hit_notes // total_notes
+                                    score += int(PERFECT_INCREMENT * hit_notes / total_notes)
                                 elif judgment == "good":
                                     combo = 0
                                     hit_notes += 0.9
-                                    score += 3076 * hit_notes // total_notes
+                                    score += int(GOOD_INCREMENT * hit_notes / total_notes)
                                 elif judgment == "bad":
                                     combo = 0
-                                    hit_notes += 0.6
-                                    score += 1204 * hit_notes // total_notes
+                                    hit_notes += 0.65
+                                    score += int(BAD_INCREMENT * hit_notes / total_notes)
                                 else:
                                     combo = 0
                         if not hit:
@@ -610,12 +602,12 @@ def main():
                 update_line_position()
                 draw_game()
                 note_timer += 1
-                if note_index < len(note_instructions) and note_timer > note_instructions[note_index]['time'] * FPS:
+                if note_index < len(note_instructions) and note_timer > note_instructions[note_index]["time"] * FPS:
                     note = note_instructions[note_index]
-                    if 'x' in note and 'y' in note:
-                        notes.append(Note(note['x'], note['y'], note.get('note_expand_speed', note_expand_speed), line_direction))
-                    if 'line_speed' in note:
-                        line_speed = note['line_speed']
+                    if "x" in note and "y" in note:
+                        notes.append(Note(note["x"], note["y"], note.get("note_expand_speed", note_expand_speed), line_direction))
+                    if "line_speed" in note:
+                        line_speed = note["line_speed"]
                     note_index += 1
                 if not pygame.mixer.music.get_busy():
                     save_player_data()

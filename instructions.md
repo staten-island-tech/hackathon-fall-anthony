@@ -16,13 +16,13 @@ There are **three lines** in this game: **the upper and lower boundary lines**, 
 
 *A common mistake is catching the note exactly when the bouncing line collides with a note. However, another factor to consider when playing the game is the expanding inner circle within each note. The inner circle expands until it has reached the radius of the outer circle, and then it shrinks until it has fully dissipated. The player must catch the note when the bouncing line hits the note and the inner circle has fully expanded.*
 
-The accuracy is determined by the player's **precision** in hitting the notes. A maximum score of **1,199,380** can be achieved if all notes are hit perfectly. The number of consecutive perfect hits is also displayed as your **combo**.
+The accuracy is determined by the player's **precision** in hitting the notes. A maximum score of **1,255,968** can be achieved if all notes are hit perfectly. The number of consecutive perfect hits is also displayed as your **combo**.
 
 There are **four types of judgments** that can be made when hitting a note:
 
-- **Perfect:** The note was caught at the perfect time. (MAX. 9,226 PTS.)
-- **Good:** The note was caught at a good time. (MAX. 5,703 PTS.)
-- **Bad:** The note was caught at a bad time. (MAX. 1,967 PTS.)
+- **Perfect:** The note was caught at the perfect time. (MAX. 12,312 PTS.)
+- **Good:** The note was caught at a good time. (MAX. 6,518 PTS.)
+- **Bad:** The note was caught at a bad time. (MAX. 2,478 PTS.)
 - **Miss:** The note was missed. (0 PTS.)
 
 Your **score increment** for each note hit also depends on your **accuracy**. The higher your accuracy, the more points you will receive for each note caught (except for misses).

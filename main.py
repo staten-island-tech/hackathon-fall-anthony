@@ -30,7 +30,7 @@ pygame.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Pulsebound: Freedom Dive")
+pygame.display.set_caption("Pulsebound: Celestial Drift")
 pygame.display.set_icon(pygame.image.load("./images/icon.png"))
 
 # Set the FPS of the game
@@ -39,8 +39,8 @@ FPS = 60
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-RED = (252, 91, 91)
-BLUE = (71, 169, 255)
+GOLD = (225, 187, 37)
+TEAL = (34, 197, 145)
 GRAY = (200, 200, 200)
 
 # Font properties and text rendering
@@ -79,9 +79,9 @@ note_expand_speed = 1  # Default note expansion speed (1)
 # Score
 score = 0  # Player score
 combo = 0  # Combo counter
-PERFECT_INCREMENT = 9226  # Perfect note score increment
-GOOD_INCREMENT = 5703  # Good note score increment
-BAD_INCREMENT = 1967  # Bad note score increment
+PERFECT_INCREMENT = 12816  # Perfect note score increment
+GOOD_INCREMENT = 6518  # Good note score increment
+BAD_INCREMENT = 2478  # Bad note score increment
 
 # Bouncing line
 LINE_WIDTH = 5
@@ -161,7 +161,7 @@ def draw_menu() -> None:
     player = load_player("./player.json")
 
     title_text = font.render("PULSEBOUND", True, WHITE)
-    subtitle_text = subtitle_font.render("FREEDOM DIVE", True, GRAY)
+    subtitle_text = subtitle_font.render("CELESTIAL DRIFT", True, GRAY)
     previous_score_text = tiny_font.render(f"LAST SCORE {player['previous_score']} ({player['previous_rating']})", True, (140, 140, 140))
     previous_accuracy_text = tiny_font.render(f"LAST ACCURACY {player['previous_accuracy']:.2f}%", True, (140, 140, 140))
     best_score_text = tiny_font.render(f"BEST SCORE {player['best_score']} ({player['best_rating']})", True, (140, 140, 140))
@@ -194,7 +194,7 @@ def draw_game() -> None:
     screen.fill(BLACK)
     
     # Scrolling label for song title
-    song = small_font.render("XI - FREEDOM DIVE", True, (24, 24, 24))
+    song = small_font.render("CELESTIAL DRIFT", True, (24, 24, 24))
     song_x -= 1 / FPS / song_length * (SCREEN_WIDTH + song.get_width())
     screen.blit(song, (song_x, top_line_y + 15))
 
@@ -232,7 +232,7 @@ def draw_game() -> None:
             {
                 "y": bouncing_line_y + top_line_bounce,
                 "alpha": 255,
-                "color": RED
+                "color": GOLD
             }
         )
     elif bouncing_line_y >= bottom_line_y:
@@ -243,7 +243,7 @@ def draw_game() -> None:
             {
                 "y": bouncing_line_y + bottom_line_bounce,
                 "alpha": 255,
-                "color": BLUE
+                "color": TEAL
             }
         )
 
@@ -344,7 +344,7 @@ def update_line_position() -> None:
                 {
                     "y": bouncing_line_y + top_line_bounce,
                     "alpha": 255,
-                    "color": RED
+                    "color": GOLD
                 }
             )
         else:
@@ -353,13 +353,12 @@ def update_line_position() -> None:
                 {
                     "y": bouncing_line_y + bottom_line_bounce,
                     "alpha": 255,
-                    "color": BLUE
+                    "color": TEAL
                 }
             )
 
-pygame.mixer.music.load("./songs/freedom_dive.mp3")
-pygame.mixer.music.set_volume(0.4)
-song = MP3("./songs/freedom_dive.mp3")
+pygame.mixer.music.load("./songs/celestial_drift.mp3")
+song = MP3("./songs/celestial_drift.mp3")
 song_length = song.info.length
 
 def save_player_data() -> None:
@@ -375,13 +374,14 @@ def save_player_data() -> None:
     save_player("./player.json", player)
 
 def restart_program() -> None:
-    os.execl(sys.executable, sys.executable, *sys.argv)
+    os.execv(sys.executable, ["python", "main.py"])
 
 def main():
     global state, notes, score, combo, note_index, feedback, feedback_timer, feedback_scale, feedback_x, feedback_y, total_notes, hit_notes, note_expand_speed, line_speed, menu_song_playing, fade_alpha, countdown_began, countdown_timer, previous_countdown, countdown
 
     clock = pygame.time.Clock()
-    note_timer = 0
+    # Remove note_timer variable
+    # note_timer = 0
 
     # Set initial line speed from settings
     line_speed = settings["line_speed"]
@@ -404,71 +404,17 @@ def main():
                     if event.key in (pygame.K_RETURN, pygame.K_SPACE):
                         state = FADE_OUT
                         start_sound.play()
-                elif state == GAME and "note" in locals():
-                    if not note == note_instructions[-1]:
-                        if event.key == pygame.K_ESCAPE:
-                            state = GAME_COMPLETE_FADE_OUT
-                            pygame.mixer.music.stop()
-                        else:
-                            hit = False
-                            for note in notes:
-                                judgment = check_note_hit(note, bouncing_line_y, line_speed)
-                                if judgment:
-                                    notes.remove(note)
-                                    feedback = judgment.upper()
-                                    feedback_timer = FEEDBACK_DURATION
-                                    feedback_scale = 1.0
-                                    feedback_x = note.x
-                                    feedback_y = note.y
-                                    total_notes += 1
-                                    hit = True
-                                    horizontal_effects.append(
-                                        {
-                                            "y": note.y,
-                                            "alpha": 255
-                                        }
-                                    )
-                                    vertical_effects.append(
-                                        {
-                                            "x": note.x,
-                                            "alpha": 255
-                                        }
-                                    )
-                                    if judgment == "perfect":
-                                        combo += 1
-                                        hit_notes += 1
-                                        score += int(PERFECT_INCREMENT * hit_notes / total_notes)
-                                    elif judgment == "good":
-                                        combo = 0
-                                        hit_notes += 0.9
-                                        score += int(GOOD_INCREMENT * hit_notes / total_notes)
-                                    elif judgment == "bad":
-                                        combo = 0
-                                        hit_notes += 0.65
-                                        score += int(BAD_INCREMENT * hit_notes / total_notes)
-                                    else:
-                                        combo = 0
-                            if not hit:
-                                feedback = "Miss"
-                                feedback_timer = FEEDBACK_DURATION
-                                feedback_scale = 1.0
-                                feedback_x = SCREEN_WIDTH // 2
-                                feedback_y = bouncing_line_y
-                                combo = 0
-                                total_notes += 1
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if state == MENU:
-                    if play_button.is_clicked(event.pos):
-                        play_button.clicked = True
-                        click_sound.play()
-                elif state == GAME and "note" in locals():
-                    if not note == note_instructions[-1]:
+                elif state == GAME:
+                    if event.key == pygame.K_ESCAPE:
+                        state = GAME_COMPLETE_FADE_OUT
+                        pygame.mixer.music.stop()
+                    else:
                         hit = False
                         for note in notes:
                             judgment = check_note_hit(note, bouncing_line_y, line_speed)
                             if judgment:
                                 notes.remove(note)
-                                feedback = judgment.capitalize()
+                                feedback = judgment.upper()
                                 feedback_timer = FEEDBACK_DURATION
                                 feedback_scale = 1.0
                                 feedback_x = note.x
@@ -501,14 +447,66 @@ def main():
                                     score += int(BAD_INCREMENT * hit_notes / total_notes)
                                 else:
                                     combo = 0
-                        if not hit:
-                            feedback = "Miss"
+                            if not hit:
+                                feedback = "Miss"
+                                feedback_timer = FEEDBACK_DURATION
+                                feedback_scale = 1.0
+                                feedback_x = SCREEN_WIDTH // 2
+                                feedback_y = bouncing_line_y
+                                combo = 0
+                                total_notes += 1
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if state == MENU:
+                    if play_button.is_clicked(event.pos):
+                        play_button.clicked = True
+                        click_sound.play()
+                elif state == GAME:
+                    hit = False
+                    for note in notes:
+                        judgment = check_note_hit(note, bouncing_line_y, line_speed)
+                        if judgment:
+                            notes.remove(note)
+                            feedback = judgment.capitalize()
                             feedback_timer = FEEDBACK_DURATION
                             feedback_scale = 1.0
-                            feedback_x = SCREEN_WIDTH // 2
-                            feedback_y = bouncing_line_y
-                            combo = 0
+                            feedback_x = note.x
+                            feedback_y = note.y
                             total_notes += 1
+                            hit = True
+                            horizontal_effects.append(
+                                {
+                                    "y": note.y,
+                                    "alpha": 255
+                                }
+                            )
+                            vertical_effects.append(
+                                {
+                                    "x": note.x,
+                                    "alpha": 255
+                                }
+                            )
+                            if judgment == "perfect":
+                                combo += 1
+                                hit_notes += 1
+                                score += int(PERFECT_INCREMENT * hit_notes / total_notes)
+                            elif judgment == "good":
+                                combo = 0
+                                hit_notes += 0.9
+                                score += int(GOOD_INCREMENT * hit_notes / total_notes)
+                            elif judgment == "bad":
+                                combo = 0
+                                hit_notes += 0.65
+                                score += int(BAD_INCREMENT * hit_notes / total_notes)
+                            else:
+                                combo = 0
+                    if not hit:
+                        feedback = "Miss"
+                        feedback_timer = FEEDBACK_DURATION
+                        feedback_scale = 1.0
+                        feedback_x = SCREEN_WIDTH // 2
+                        feedback_y = bouncing_line_y
+                        combo = 0
+                        total_notes += 1
             if event.type == pygame.MOUSEBUTTONUP:
                 if state == MENU:
                     # If the play button is in the "clicked" state, meaning that the source of the click is the button, and the mouse button has just been released, then switch to the "GAME" state.
@@ -597,8 +595,8 @@ def main():
             elif state == GAME:
                 update_line_position()
                 draw_game()
-                note_timer += 1
-                if note_index < len(note_instructions) and note_timer > note_instructions[note_index]["time"] * FPS:
+                current_time = pygame.mixer.music.get_pos() / 1000.0  # Get current time in seconds
+                if note_index < len(note_instructions) and current_time >= note_instructions[note_index]["time"]:
                     note = note_instructions[note_index]
                     if "x" in note and "y" in note:
                         notes.append(Note(note["x"], note["y"], note.get("note_expand_speed", note_expand_speed), line_direction))

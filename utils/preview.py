@@ -28,16 +28,16 @@ state = MENU
 
 # Load settings and notes from notes.json
 def load_notes(filename) -> tuple:
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         data = json.load(file)
-    return data['settings'], data['notes']
+    return data["settings"], data["notes"]
 
-settings, note_instructions = load_notes('notes.json')
+settings, note_instructions = load_notes("notes.json")
 
 # Apply settings
-line_speed = settings['line_speed']
-top_line_y = settings['top_line_y']
-bottom_line_y = settings['bottom_line_y']
+line_speed = settings["line_speed"]
+top_line_y = settings["top_line_y"]
+bottom_line_y = settings["bottom_line_y"]
 note_expand_speed = 1.5
 
 # Starting line position and direction
@@ -105,7 +105,9 @@ def draw_game():
         current_time = pygame.mixer.music.get_pos() / 1000  # Update when music is playing
 
     # Display note information
+    time_text = small_font.render(f"Time: {current_time:.3f}", True, WHITE)
     note_text = small_font.render(f"Note: {note_index}/{len(note_instructions)}", True, WHITE)
+    screen.blit(time_text, (10, 10))
     screen.blit(note_text, (SCREEN_WIDTH - note_text.get_width() - 10, 10))
 
 def pause_game():
@@ -120,7 +122,7 @@ def restart_game():
     notes = []
     line_y = SCREEN_HEIGHT // 2
     line_direction = 1
-    line_speed = settings['line_speed']
+    line_speed = settings["line_speed"]
     note_timer = 0
     note_index = 0
     pygame.mixer.music.play()
@@ -137,7 +139,7 @@ def add_note():
         "note_expand_speed": expand_speed
     }
     note_instructions.append(new_note)
-    with open('notes.json', 'w') as file:
+    with open("notes.json", "w") as file:
         json.dump({"settings": settings, "notes": note_instructions}, file, indent=4)
 
 def delete_note():
@@ -146,12 +148,12 @@ def delete_note():
         # Remove the selected note
         del note_instructions[note_index]
         
-        # If there are still notes, ensure the note_index doesn't exceed the length
+        # If there are still notes, ensure the note_index doesn"t exceed the length
         if note_index >= len(note_instructions):
             note_index = len(note_instructions) - 1 if len(note_instructions) > 0 else 0
         
         # Save the updated notes back to the file
-        with open('notes.json', 'w') as file:
+        with open("notes.json", "w") as file:
             json.dump({"settings": settings, "notes": note_instructions}, file, indent=4)
 
 def main():
@@ -163,8 +165,7 @@ def main():
     note_index = 0
     save_index = 0
 
-    pygame.mixer.music.load('./songs/freedom_dive.mp3')
-    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.load("./songs/celestial_drift.mp3")
 
     while True:
         if state == GAME:
@@ -191,15 +192,13 @@ def main():
                         restart_game()
                     elif event.key == pygame.K_SPACE:
                         add_note()
-                    elif event.key == pygame.K_d:  # Press 'D' to delete the current note
+                    elif event.key == pygame.K_d:  # Press "D" to delete the current note
                         delete_note()  # Call delete_note function
                 elif state == PAUSE:
                     if event.key == pygame.K_TAB:
                         state = GAME
                         pygame.mixer.music.unpause()
                         playing = True
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                add_note()
 
         if state == MENU:
             screen.fill(BLACK)
@@ -210,12 +209,12 @@ def main():
         elif state == GAME:
             draw_game()
             note_timer += 1
-            if note_index < len(note_instructions) and note_timer > note_instructions[note_index]['time'] * 60:
+            if note_index < len(note_instructions) and current_time >= note_instructions[note_index]["time"]:
                 note = note_instructions[note_index]
-                if 'x' in note and 'y' in note:
-                    notes.append(Note(note['x'], note['y'], note.get('note_expand_speed', note_expand_speed)))
-                if 'line_speed' in note:
-                    line_speed = note['line_speed']
+                if "x" in note and "y" in note:
+                    notes.append(Note(note["x"], note["y"], note.get("note_expand_speed", note_expand_speed)))
+                if "line_speed" in note:
+                    line_speed = note["line_speed"]
                 note_index += 1
         elif state == PAUSE:
             pause_text = font.render("Paused", True, WHITE)

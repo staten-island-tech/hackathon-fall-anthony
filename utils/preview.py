@@ -1,4 +1,4 @@
-import pygame, pygame.gfxdraw, sys, random, json, time
+import pygame, pygame.gfxdraw, sys, random, json
 
 # Initialize Pygame
 pygame.init()
@@ -82,8 +82,11 @@ class Note:
 
 notes = []
 
+# Initialize note timer
+note_timer = 0
+
 def draw_game():
-    global line_y, line_direction, line_speed, current_time, playing
+    global line_y, line_direction, line_speed, note_timer, playing
     screen.fill(BLACK)
     pygame.draw.line(screen, WHITE, (0, top_line_y), (SCREEN_WIDTH, top_line_y), 10)
     pygame.draw.line(screen, WHITE, (0, bottom_line_y), (SCREEN_WIDTH, bottom_line_y), 10)
@@ -100,12 +103,8 @@ def draw_game():
         if note.progress <= 0 and note.opacity <= 38:
             notes.remove(note)
 
-    # Update current_time only when the music is playing, and not during rewinding
-    if playing:
-        current_time = pygame.mixer.music.get_pos() / 1000  # Update when music is playing
-
     # Display note information
-    time_text = small_font.render(f"Time: {current_time:.3f}", True, WHITE)
+    time_text = small_font.render(f"Time: {note_timer:.3f}", True, WHITE)
     note_text = small_font.render(f"Note: {note_index}/{len(note_instructions)}", True, WHITE)
     screen.blit(time_text, (10, 10))
     screen.blit(note_text, (SCREEN_WIDTH - note_text.get_width() - 10, 10))
@@ -129,8 +128,8 @@ def restart_game():
     playing = True
 
 def add_note():
-    global line_y
-    current_time = round(pygame.mixer.music.get_pos() / 1000, 2)
+    global line_y, note_timer
+    current_time = round(note_timer, 2)
     expand_speed = round(random.uniform(0.6, 1.4), 4)
     new_note = {
         "time": round(current_time - ((NOTE_RADIUS / expand_speed) / FPS), 3),
@@ -157,11 +156,10 @@ def delete_note():
             json.dump({"settings": settings, "notes": note_instructions}, file, indent=4)
 
 def main():
-    global state, notes, line_y, line_direction, line_speed, note_timer, note_index, save_index, current_time, playing
+    global state, notes, line_y, line_direction, line_speed, note_timer, note_index, save_index, playing
     clock = pygame.time.Clock()
-    current_time = 0
-    playing = False  # This will track whether music is currently playing
     note_timer = 0
+    playing = False  # This will track whether music is currently playing
     note_index = 0
     save_index = 0
 
@@ -190,10 +188,10 @@ def main():
                         pause_game()
                     elif event.key == pygame.K_r:
                         restart_game()
-                    elif event.key == pygame.K_SPACE:
-                        add_note()
                     elif event.key == pygame.K_d:  # Press "D" to delete the current note
                         delete_note()  # Call delete_note function
+                    else:
+                        add_note()
                 elif state == PAUSE:
                     if event.key == pygame.K_TAB:
                         state = GAME
@@ -208,8 +206,8 @@ def main():
             screen.blit(play_text, (SCREEN_WIDTH // 2 - play_text.get_width() // 2, SCREEN_HEIGHT // 2 - play_text.get_height() // 2 + 50))
         elif state == GAME:
             draw_game()
-            note_timer += 1
-            if note_index < len(note_instructions) and current_time >= note_instructions[note_index]["time"]:
+            note_timer += 1 / FPS
+            if note_index < len(note_instructions) and note_timer >= note_instructions[note_index]["time"]:
                 note = note_instructions[note_index]
                 if "x" in note and "y" in note:
                     notes.append(Note(note["x"], note["y"], note.get("note_expand_speed", note_expand_speed)))

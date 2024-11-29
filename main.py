@@ -40,7 +40,9 @@ FPS = 60
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GOLD = (225, 187, 37)
-TEAL = (34, 197, 145)
+INDIGO = (80, 44, 180)
+RED = (241, 125, 126)
+BLUE = (147, 93, 233)
 GRAY = (200, 200, 200)
 
 # Font properties and text rendering
@@ -74,7 +76,7 @@ state = MENU  # Menu state by default
 
 # Notes
 NOTE_RADIUS = 45  # Note radius (constant)
-note_expand_speed = 1  # Default note expansion speed (1)
+note_expand_speed = 1  # Default note expansion speed
 
 # Score
 score = 0  # Player score
@@ -243,7 +245,7 @@ def draw_game() -> None:
             {
                 "y": bouncing_line_y + bottom_line_bounce,
                 "alpha": 255,
-                "color": TEAL
+                "color": INDIGO
             }
         )
 
@@ -260,7 +262,7 @@ def draw_game() -> None:
         if note.progress <= 0 and not note.expanding:
             notes.remove(note)
             combo = 0
-            feedback = "Miss"
+            feedback = "MISS"
             feedback_timer = FEEDBACK_DURATION
             feedback_scale = 1.0
             feedback_x = note.x
@@ -299,7 +301,7 @@ def draw_game() -> None:
 
     score_percentage = score / (PERFECT_INCREMENT * max(note["id"] for note in note_instructions if "id" in note)) * 100
     score_rating = (
-        "S+" if score_percentage == 100 else
+        "S+" if score_percentage >= 100 else
         "S" if score_percentage >= 250 / 3 else
         "A" if score_percentage >= 200 / 3 else
         "B" if score_percentage >= 50 else
@@ -320,7 +322,7 @@ def draw_game() -> None:
         feedback_text = small_font.render(
             f"{feedback}! x{combo}" if combo > 1 else f"{feedback}!",
             True,
-            GRAY
+            RED if feedback == "MISS" else BLUE if feedback == "PERFECT" else GRAY
         )
         feedback_text.set_alpha(feedback_alpha)
         feedback_text = pygame.transform.scale(feedback_text, (int(feedback_text.get_width() * feedback_scale), int(feedback_text.get_height() * feedback_scale)))
@@ -353,7 +355,7 @@ def update_line_position() -> None:
                 {
                     "y": bouncing_line_y + bottom_line_bounce,
                     "alpha": 255,
-                    "color": TEAL
+                    "color": INDIGO
                 }
             )
 
@@ -376,8 +378,11 @@ def save_player_data() -> None:
 def restart_program() -> None:
     os.execv(sys.executable, ["python", "main.py"])
 
+# Initialize note timer
+note_timer = 0
+
 def main():
-    global state, notes, score, combo, note_index, feedback, feedback_timer, feedback_scale, feedback_x, feedback_y, total_notes, hit_notes, note_expand_speed, line_speed, menu_song_playing, fade_alpha, countdown_began, countdown_timer, previous_countdown, countdown
+    global state, notes, score, combo, note_index, feedback, feedback_timer, feedback_scale, feedback_x, feedback_y, total_notes, hit_notes, note_expand_speed, line_speed, menu_song_playing, fade_alpha, countdown_began, countdown_timer, previous_countdown, countdown, note_timer
 
     clock = pygame.time.Clock()
     # Remove note_timer variable
@@ -448,7 +453,7 @@ def main():
                                 else:
                                     combo = 0
                             if not hit:
-                                feedback = "Miss"
+                                feedback = "MISS"
                                 feedback_timer = FEEDBACK_DURATION
                                 feedback_scale = 1.0
                                 feedback_x = SCREEN_WIDTH // 2
@@ -466,7 +471,7 @@ def main():
                         judgment = check_note_hit(note, bouncing_line_y, line_speed)
                         if judgment:
                             notes.remove(note)
-                            feedback = judgment.capitalize()
+                            feedback = judgment.upper()
                             feedback_timer = FEEDBACK_DURATION
                             feedback_scale = 1.0
                             feedback_x = note.x
@@ -500,7 +505,7 @@ def main():
                             else:
                                 combo = 0
                     if not hit:
-                        feedback = "Miss"
+                        feedback = "MISS"
                         feedback_timer = FEEDBACK_DURATION
                         feedback_scale = 1.0
                         feedback_x = SCREEN_WIDTH // 2
@@ -595,8 +600,8 @@ def main():
             elif state == GAME:
                 update_line_position()
                 draw_game()
-                current_time = pygame.mixer.music.get_pos() / 1000.0  # Get current time in seconds
-                if note_index < len(note_instructions) and current_time >= note_instructions[note_index]["time"]:
+                note_timer += 1 / FPS
+                if note_index < len(note_instructions) and note_timer >= note_instructions[note_index]["time"]:
                     note = note_instructions[note_index]
                     if "x" in note and "y" in note:
                         notes.append(Note(note["x"], note["y"], note.get("note_expand_speed", note_expand_speed), line_direction))

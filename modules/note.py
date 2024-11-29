@@ -3,7 +3,7 @@ import pygame.draw
 NOTE_RADIUS = 45
 WHITE = (255, 255, 255)
 GOLD = (225, 187, 37)
-TEAL = (34, 197, 145)
+INDIGO = (80, 44, 180)
 
 class Note:
     def __init__(self, x, y, expand_speed, line_direction=None, id=None) -> None:
@@ -14,7 +14,7 @@ class Note:
         self.expand_speed = expand_speed
         self.expanding = True
         # Color the note based on the line direction
-        self.color = GOLD if line_direction == 1 else TEAL  # The line direction also determines the last boundary line touched
+        self.color = GOLD if line_direction == 1 else INDIGO  # The line direction also determines the last boundary line touched
         self.alpha = 0  # Initial opacity
 
     def expand(self) -> None:
@@ -31,7 +31,7 @@ class Note:
 
     def draw(self, screen) -> None:
         alpha_surface = pygame.Surface((screen.get_width(), screen.get_height()), pygame.SRCALPHA)
-        pygame.draw.circle(alpha_surface, (*self.color, min(self.alpha, 172)), (self.x, self.y), int(self.progress)) 
+        pygame.draw.circle(alpha_surface, (*self.color, min(self.alpha, 144)), (self.x, self.y), int(self.progress)) 
         screen.blit(alpha_surface, (0, 0))
         
         # If the note is expanding, decrease the radius of the outer circle from 125% to 100% its target radius. If the note is shrinking, increase the radius of the outer circle from 100% to 125% its target radius.

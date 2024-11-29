@@ -7,10 +7,10 @@ def create_player(filename) -> None:
         json.dump(
             {
                 "previous_score": 0,
-                "previous_rating": "N/A",
+                "previous_rating": "F",
                 "previous_accuracy": 0,
                 "best_score": 0,
-                "best_rating": "N/A",
+                "best_rating": "F",
                 "best_accuracy": 0
             },
             file,

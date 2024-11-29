@@ -16,7 +16,7 @@ There are **three lines** in this game: **the upper and lower boundary lines**, 
 
 *A common mistake is catching the note exactly when the bouncing line collides with a note. However, another factor to consider when playing the game is the expanding inner circle within each note. The inner circle expands until it has reached the radius of the outer circle, and then it shrinks until it has fully dissipated. The player must catch the note when the bouncing line hits the note and the inner circle has fully expanded.*
 
-The accuracy is determined by the player's **precision** in hitting the notes. A maximum score of **1,255,968** can be achieved if all notes are hit perfectly. The number of consecutive perfect hits is also displayed as your **combo**.
+The accuracy is determined by the player's **precision** in hitting the notes. A maximum score of **3,280,896** can be achieved if all notes are hit perfectly. The number of consecutive perfect hits is also displayed as your **combo**.
 
 There are **four types of judgments** that can be made when hitting a note:
 
@@ -27,6 +27,6 @@ There are **four types of judgments** that can be made when hitting a note:
 
 Your **score increment** for each note hit also depends on your **accuracy**. The higher your accuracy, the more points you will receive for each note caught (except for misses).
 
-*Any rating S and above is excellent. S+ is almost unobtainable, as it requires every note to be caught perfectly. If you can reach it, then you are a true rhythm master!*
+*Any rating A and above is excellent. S+ is almost unobtainable, as it requires every note to be caught perfectly. If you can reach it, then you are a true rhythm master!*
 
 Good luck; have fun! ☺

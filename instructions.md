@@ -20,7 +20,7 @@ The accuracy is determined by the player's **precision** in hitting the notes. A
 
 There are **four types of judgments** that can be made when hitting a note:
 
-- **Perfect:** The note was caught at the perfect time. (MAX. 12,312 PTS.)
+- **Perfect:** The note was caught at the perfect time. (MAX. 12,816 PTS.)
 - **Good:** The note was caught at a good time. (MAX. 6,518 PTS.)
 - **Bad:** The note was caught at a bad time. (MAX. 2,478 PTS.)
 - **Miss:** The note was missed. (0 PTS.)

@@ -167,9 +167,9 @@ def draw_menu() -> None:
 
     title_text = font.render("PULSEBOUND", True, WHITE)
     subtitle_text = subtitle_font.render("CELESTIAL DRIFT", True, GRAY)
-    previous_score_text = tiny_font.render(f"LAST SCORE {player['previous_score']} ({player['previous_rating']})", True, (140, 140, 140))
+    previous_score_text = tiny_font.render(f"LAST SCORE {player['previous_score']:,} ({player['previous_rating']})", True, (140, 140, 140))
     previous_accuracy_text = tiny_font.render(f"LAST ACCURACY {player['previous_accuracy']:.2f}%", True, (140, 140, 140))
-    best_score_text = tiny_font.render(f"BEST SCORE {player['best_score']} ({player['best_rating']})", True, (140, 140, 140))
+    best_score_text = tiny_font.render(f"BEST SCORE {player['best_score']:,} ({player['best_rating']})", True, (140, 140, 140))
     best_accuracy_text = tiny_font.render(f"BEST ACCURACY {player['best_accuracy']:.2f}%", True, (140, 140, 140))
 
     title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100))
@@ -321,7 +321,7 @@ def draw_game() -> None:
     )
     accuracy = (hit_notes / total_notes * 100) if total_notes > 0 else 0
 
-    score_text = small_font.render(f"SCORE {score} ({score_rating})", True, WHITE)
+    score_text = small_font.render(f"SCORE {score:,} ({score_rating})", True, WHITE)
     accuracy_text = small_font.render(f"ACCURACY {accuracy:.2f}%", True, WHITE)
     screen.blit(score_text, (20, 20))
     screen.blit(accuracy_text, (SCREEN_WIDTH - accuracy_text.get_width() - 20, 20))

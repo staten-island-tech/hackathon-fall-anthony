@@ -402,8 +402,6 @@ def main():
     global state, notes, score, combo, note_index, feedback, feedback_timer, feedback_scale, feedback_x, feedback_y, total_notes, hit_notes, note_expand_speed, line_speed, menu_song_playing, fade_alpha, countdown_began, countdown_timer, previous_countdown, countdown, note_timer
 
     clock = pygame.time.Clock()
-    # Remove note_timer variable
-    # note_timer = 0
 
     # Set initial line speed from settings
     line_speed = settings["line_speed"]

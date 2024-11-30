@@ -30,12 +30,12 @@ def load_notes(filename) -> tuple:
     return data["settings"], data["notes"]
 
 def check_note_hit(note, line_y, line_speed) -> str:
-    if note.progress >= NOTE_RADIUS - 10:
+    if note.progress >= NOTE_RADIUS - 12:
         if abs(note.y - line_y) <= NOTE_RADIUS * line_speed / 6:
             return "perfect"
         elif abs(note.y - line_y) <= NOTE_RADIUS * line_speed / 3:
             return "good"
-    elif note.progress >= NOTE_RADIUS - 20:
+    elif note.progress >= NOTE_RADIUS - 24:
         if abs(note.y - line_y) <= NOTE_RADIUS * line_speed / 6:
             return "good"
         elif abs(note.y - line_y) <= NOTE_RADIUS * line_speed / 3:

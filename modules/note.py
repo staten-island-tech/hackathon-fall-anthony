@@ -2,8 +2,8 @@ import pygame.draw
 
 NOTE_RADIUS = 45
 WHITE = (255, 255, 255)
-GOLD = (225, 187, 37)
-INDIGO = (80, 44, 180)
+RED = (247, 74, 76)
+BLUE = (67, 171, 251)
 
 class Note:
     def __init__(self, x, y, expand_speed, line_direction=None, id=None) -> None:
@@ -14,7 +14,7 @@ class Note:
         self.expand_speed = expand_speed
         self.expanding = True
         # Color the note based on the line direction
-        self.color = GOLD if line_direction == 1 else INDIGO  # The line direction also determines the last boundary line touched
+        self.color = RED if line_direction == 1 else BLUE  # The line direction also determines the last boundary line touched
         self.alpha = 0  # Initial opacity
 
     def expand(self) -> None:

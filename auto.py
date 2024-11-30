@@ -20,8 +20,9 @@ environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 import pygame, sys, random, os
 from mutagen.mp3 import MP3
 from modules.note import Note
-from modules.utils import load_player, load_notes, check_note_hit, save_player
+from modules.utils import load_player, load_notes, save_player
 from modules.button import Button
+import json
 
 # Initialize Pygame
 pygame.init()
@@ -398,6 +399,16 @@ def restart_program() -> None:
 # Initialize note timer
 note_timer = 0
 
+def save_notes(notes):
+    with open("notes.json", "r") as file:
+        data = json.load(file)
+    for note in notes:
+        for n in data["notes"]:
+            if n.get("id") == note.id:
+                n["y"] = note.y
+    with open("notes.json", "w") as file:
+        json.dump(data, file, indent=4)
+
 def main():
     global state, notes, score, combo, note_index, feedback, feedback_timer, feedback_scale, feedback_x, feedback_y, total_notes, hit_notes, note_expand_speed, line_speed, menu_song_playing, fade_alpha, countdown_began, countdown_timer, previous_countdown, countdown, note_timer
 
@@ -430,108 +441,13 @@ def main():
                     if event.key == pygame.K_ESCAPE:
                         state = GAME_COMPLETE_FADE_OUT
                         pygame.mixer.music.stop()
-                    else:
-                        hit = False
-                        for note in notes:
-                            judgment = check_note_hit(note, bouncing_line_y, line_speed)
-                            if judgment:
-                                notes.remove(note)
-                                feedback = judgment.upper()
-                                feedback_timer = FEEDBACK_DURATION
-                                feedback_scale = 1.0
-                                feedback_x = note.x
-                                feedback_y = note.y
-                                total_notes += 1
-                                hit = True
-                                horizontal_effects.append(
-                                    {
-                                        "y": note.y,
-                                        "alpha": 255
-                                    }
-                                )
-                                vertical_effects.append(
-                                    {
-                                        "x": note.x,
-                                        "alpha": 255
-                                    }
-                                )
-                                if judgment == "perfect":
-                                    combo += 1
-                                    hit_notes += 1
-                                    score += int(PERFECT_INCREMENT * hit_notes / total_notes)
-                                elif judgment == "good":
-                                    combo = 0
-                                    hit_notes += 0.9
-                                    score += int(GOOD_INCREMENT * hit_notes / total_notes)
-                                elif judgment == "bad":
-                                    combo = 0
-                                    hit_notes += 0.65
-                                    score += int(BAD_INCREMENT * hit_notes / total_notes)
-                                else:
-                                    combo = 0
-                            if not hit:
-                                feedback = "MISS"
-                                feedback_timer = FEEDBACK_DURATION
-                                feedback_scale = 1.0
-                                feedback_x = SCREEN_WIDTH // 2
-                                feedback_y = bouncing_line_y
-                                combo = 0
-                                total_notes += 1
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if state == MENU:
                     if play_button.is_clicked(event.pos):
                         play_button.clicked = True
                         click_sound.play()
-                elif state == GAME:
-                    hit = False
-                    for note in notes:
-                        judgment = check_note_hit(note, bouncing_line_y, line_speed)
-                        if judgment:
-                            notes.remove(note)
-                            feedback = judgment.upper()
-                            feedback_timer = FEEDBACK_DURATION
-                            feedback_scale = 1.0
-                            feedback_x = note.x
-                            feedback_y = note.y
-                            total_notes += 1
-                            hit = True
-                            horizontal_effects.append(
-                                {
-                                    "y": note.y,
-                                    "alpha": 255
-                                }
-                            )
-                            vertical_effects.append(
-                                {
-                                    "x": note.x,
-                                    "alpha": 255
-                                }
-                            )
-                            if judgment == "perfect":
-                                combo += 1
-                                hit_notes += 1
-                                score += int(PERFECT_INCREMENT * hit_notes / total_notes)
-                            elif judgment == "good":
-                                combo = 0
-                                hit_notes += 0.9
-                                score += int(GOOD_INCREMENT * hit_notes / total_notes)
-                            elif judgment == "bad":
-                                combo = 0
-                                hit_notes += 0.65
-                                score += int(BAD_INCREMENT * hit_notes / total_notes)
-                            else:
-                                combo = 0
-                    if not hit:
-                        feedback = "MISS"
-                        feedback_timer = FEEDBACK_DURATION
-                        feedback_scale = 1.0
-                        feedback_x = SCREEN_WIDTH // 2
-                        feedback_y = bouncing_line_y
-                        combo = 0
-                        total_notes += 1
             elif event.type == pygame.MOUSEBUTTONUP:
                 if state == MENU:
-                    # If the play button is in the "clicked" state, meaning that the source of the click is the button, and the mouse button has just been released, then switch to the "GAME" state.
                     if play_button.clicked and play_button.is_clicked(event.pos):
                         state = FADE_OUT
                         start_sound.play()
@@ -621,13 +537,42 @@ def main():
                 if note_index < len(note_instructions) and note_timer >= note_instructions[note_index]["time"]:
                     note = note_instructions[note_index]
                     if "x" in note and "y" in note:
-                        notes.append(Note(note["x"], note["y"], note.get("note_expand_speed", note_expand_speed), line_direction))
+                        notes.append(Note(note["x"], note["y"], note.get("note_expand_speed", note_expand_speed), line_direction, note.get("id")))
                     if "line_speed" in note:
                         line_speed = note["line_speed"]
                     note_index += 1
                 if not pygame.mixer.music.get_busy():
                     save_player_data()
                     state = GAME_COMPLETE_FADE_OUT
+
+                # Automatically hit every note perfectly when the inner circle expands to the outer circle
+                for note in notes[:]:
+                    if note.progress >= NOTE_RADIUS:
+                        notes.remove(note)
+                        feedback = "PERFECT"
+                        feedback_timer = FEEDBACK_DURATION
+                        feedback_scale = 1.0
+                        feedback_x = note.x
+                        feedback_y = note.y
+                        total_notes += 1
+                        hit_notes += 1
+                        combo += 1
+                        score += int(PERFECT_INCREMENT * hit_notes / total_notes)
+                        horizontal_effects.append(
+                            {
+                                "y": note.y,
+                                "alpha": 255
+                            }
+                        )
+                        vertical_effects.append(
+                            {
+                                "x": note.x,
+                                "alpha": 255
+                            }
+                        )
+                        # Print note details
+                        offset = abs(note.y - bouncing_line_y)
+                        print(f"Time: {note_timer:.03f}, Note ID: {note.id}, Note Y: {note.y}, Bouncing Line Y: {bouncing_line_y}, Offset: {offset}")
 
         pygame.display.flip()
         clock.tick(FPS)
